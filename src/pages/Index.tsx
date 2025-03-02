@@ -31,42 +31,50 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden bg-litflix-cream">
+    <div className="min-h-screen w-full relative overflow-hidden bg-litflix-cream">
+      {/* Decorative elements */}
+      <div className="circle-decoration circle-1"></div>
+      <div className="circle-decoration circle-2"></div>
+      <div className="book-decoration book-left"></div>
+      <div className="book-decoration book-right"></div>
+
       {/* Background image with overlay */}
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0 -z-10 overflow-hidden">
         <img 
-          src="/lovable-uploads/dd4f5308-4d1e-4ec1-a29d-c90913eeebe1.png" 
+          src="/lovable-uploads/c1af6f80-b0f1-4042-994f-f01bab5c20fd.png" 
           alt="Cozy reading space" 
-          className="w-full h-full object-cover opacity-70"
+          className="w-full h-full object-cover opacity-60"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-litflix-cream/30 to-litflix-cream/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-litflix-cream/80 via-litflix-cream/70 to-litflix-cream/90" />
       </div>
 
       {/* BOOKS logo */}
-      <div className="pt-10 pb-6 text-center">
-        <h1 className="text-7xl font-serif font-bold tracking-wider inline-block">
-          <span className="text-litflix-darkGreen">B</span>
-          <span className="text-litflix-darkGreen relative">
-            <span className="absolute text-xs top-2 right-0">R.</span>
+      <div className="pt-8 pb-4 text-center">
+        <h1 className="text-7xl font-serif font-bold tracking-wider inline-block text-litflix-darkGreen">
+          <span className="relative">
+            B
+          </span>
+          <span className="relative">
+            <span className="absolute text-xs top-3 right-0 font-sans">R.</span>
             O
           </span>
-          <span className="text-litflix-darkGreen relative">
-            <span className="absolute text-xs bottom-2 right-0">d.</span>
+          <span className="relative">
+            <span className="absolute text-xs bottom-3 right-0 font-sans">d.</span>
             O
           </span>
-          <span className="text-litflix-darkGreen">K</span>
-          <span className="text-litflix-darkGreen">S</span>
+          <span>K</span>
+          <span>S</span>
         </h1>
       </div>
       
-      <main className="container mx-auto px-4 pt-8 pb-20">
+      <main className="container mx-auto px-4 pt-6 pb-20">
         {/* Find Book Button centered */}
-        <div className="flex justify-center mb-14 pt-6">
+        <div className="flex justify-center mb-16 pt-4">
           <FindBookButton onClick={handleFindBook} />
         </div>
 
         {/* Book cards grid */}
-        <div className="grid grid-cols-3 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-3 gap-6 max-w-4xl mx-auto">
           {books.map((book) => (
             <BookCard
               key={book.id}

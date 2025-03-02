@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -123,6 +123,39 @@
   .book-title {
     @apply absolute -top-1.5 w-4/5 h-1 rounded-full bg-white mx-auto left-0 right-0;
   }
+  
+  .circle-decoration {
+    @apply fixed rounded-full opacity-40 blur-2xl transition-all duration-1000;
+    @apply bg-gradient-to-br from-litflix-lightGreen/30 to-litflix-mediumGreen/40;
+  }
+  
+  .circle-1 {
+    @apply -bottom-[20%] -left-[10%] w-[600px] h-[600px];
+  }
+  
+  .circle-2 {
+    @apply -top-[5%] -right-[5%] w-[500px] h-[500px];
+  }
+  
+  .book-decoration {
+    @apply fixed opacity-20 pointer-events-none;
+  }
+  
+  .book-left {
+    @apply bottom-12 left-4 w-32 h-48;
+    background-image: url('/lovable-uploads/866a95ab-8797-46f9-b963-5b5baaeae416.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: rotate(-15deg);
+  }
+  
+  .book-right {
+    @apply bottom-14 right-5 w-32 h-36;
+    background-image: url('/lovable-uploads/866a95ab-8797-46f9-b963-5b5baaeae416.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: rotate(15deg) scaleX(-1);
+  }
 }
 
 /* Custom animations */
@@ -131,9 +164,10 @@
 }
 
 .hover-lift {
-  transition: transform 0.3s ease-out;
+  transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
 }
 
 .hover-lift:hover {
   transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(107, 142, 35, 0.2);
 }
