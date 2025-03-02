@@ -41,11 +41,11 @@ const Index = () => {
       {/* Background image with overlay */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <img 
-          src="/lovable-uploads/c1af6f80-b0f1-4042-994f-f01bab5c20fd.png" 
-          alt="Cozy reading space" 
-          className="w-full h-full object-cover opacity-60"
+          src="/lovable-uploads/ff1e5352-5f90-4725-bd76-f900ee33d4ed.png" 
+          alt="Cozy living room with books" 
+          className="w-full h-full object-cover opacity-70"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-litflix-cream/80 via-litflix-cream/70 to-litflix-cream/90" />
+        <div className="absolute inset-0 bg-gradient-to-b from-litflix-cream/80 via-litflix-cream/60 to-litflix-cream/80" />
       </div>
 
       {/* BOOKS logo */}
