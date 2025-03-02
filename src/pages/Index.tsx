@@ -4,17 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import FindBookButton from '@/components/FindBookButton';
 import SearchBar from '@/components/SearchBar';
+import BookCard from '@/components/BookCard';
 import { toast } from 'sonner';
 
 const Index = () => {
   const navigate = useNavigate();
   const [showSearch, setShowSearch] = useState(false);
   
-  // Animation decorations
-  const circlePositions = [
-    { size: '500px', left: '-100px', top: '200px', delay: '0s' },
-    { size: '600px', right: '-150px', bottom: '-150px', delay: '0.3s' },
-    { size: '400px', right: '30%', top: '-100px', delay: '0.6s' },
+  // Mock book data
+  const books = [
+    { id: 1, title: 'Книга 1', author: 'Автор 1' },
+    { id: 2, title: 'Книга 2', author: 'Автор 2' },
+    { id: 3, title: 'Книга 3', author: 'Автор 3' },
+    { id: 4, title: 'Книга 4', author: 'Автор 4' },
+    { id: 5, title: 'Книга 5', author: 'Автор 5' },
+    { id: 6, title: 'Книга 6', author: 'Автор 6' },
+    { id: 7, title: 'Книга 7', author: 'Автор 7' },
+    { id: 8, title: 'Книга 8', author: 'Автор 8' },
+    { id: 9, title: 'Книга 9', author: 'Автор 9' },
   ];
 
   const handleFindBook = () => {
@@ -27,52 +34,56 @@ const Index = () => {
     navigate('/books');
   };
 
-  return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Animated background circles */}
-      {circlePositions.map((circle, index) => (
-        <div
-          key={index}
-          className="circle-bg animate-pulse-gentle"
-          style={{
-            width: circle.size,
-            height: circle.size,
-            left: circle.left,
-            right: circle.right,
-            top: circle.top,
-            bottom: circle.bottom,
-            animationDelay: circle.delay,
-          }}
-        />
-      ))}
+  const handleBookClick = (id: number) => {
+    toast.info(`Выбрана книга ${id}`);
+    // In a real app, this would show details or select the book
+  };
 
-      <Header onSearchClick={() => setShowSearch(!showSearch)} />
+  return (
+    <div className="min-h-screen relative overflow-hidden bg-litflix-cream">
+      {/* Background image */}
+      <div className="absolute inset-0 -z-10">
+        <img 
+          src="/lovable-uploads/dd4f5308-4d1e-4ec1-a29d-c90913eeebe1.png" 
+          alt="Cozy reading space" 
+          className="w-full h-full object-cover opacity-60"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-litflix-paleYellow/30 to-litflix-paleYellow/70" />
+      </div>
+
+      {/* Simple header with just the logo */}
+      <div className="pt-6 pb-4 text-center">
+        <h1 className="text-5xl md:text-6xl font-serif font-bold text-litflix-darkGreen tracking-wider">
+          <span className="text-litflix-darkGreen">B</span>
+          <span className="text-litflix-darkGreen relative">
+            <span className="absolute text-xs top-2 right-0">R.</span>
+            O
+          </span>
+          <span className="text-litflix-darkGreen relative">
+            <span className="absolute text-xs bottom-2 right-0">d.</span>
+            O
+          </span>
+          <span className="text-litflix-darkGreen">K</span>
+          <span className="text-litflix-darkGreen">S</span>
+        </h1>
+      </div>
       
-      <main className="container max-w-5xl mx-auto px-4 pt-12 pb-20">
-        <div className="flex flex-col items-center justify-center min-h-[70vh]">
-          {/* Hero image - cozy reading spot */}
-          <div className="w-full max-w-2xl h-[300px] rounded-2xl overflow-hidden mb-10 relative">
-            <img 
-              src="/lovable-uploads/39f72b27-0c19-4da6-bdd9-fb226f35d76d.png" 
-              alt="Cozy reading spot with books and plants" 
-              className="w-full h-full object-cover"
+      <main className="container mx-auto px-4 pt-4 pb-20">
+        {/* Find Book Button centered */}
+        <div className="flex justify-center mb-16 pt-10">
+          <FindBookButton onClick={handleFindBook} />
+        </div>
+
+        {/* Book cards grid */}
+        <div className="grid grid-cols-3 gap-6 max-w-4xl mx-auto">
+          {books.map((book) => (
+            <BookCard
+              key={book.id}
+              title={book.title}
+              author={book.author}
+              onClick={() => handleBookClick(book.id)}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-litflix-darkGreen/20 to-transparent" />
-          </div>
-          
-          {showSearch ? (
-            <SearchBar onSearch={handleSearch} />
-          ) : (
-            <div className="text-center animate-slide-up">
-              <h2 className="text-4xl md:text-5xl font-serif font-bold text-litflix-darkGreen mb-6">
-                От книг к фильмам
-              </h2>
-              <p className="text-lg text-litflix-darkGreen/80 max-w-xl mx-auto mb-10">
-                Найдите фильмы, которые понравятся вам, основываясь на ваших литературных предпочтениях
-              </p>
-              <FindBookButton onClick={handleFindBook} />
-            </div>
-          )}
+          ))}
         </div>
       </main>
     </div>

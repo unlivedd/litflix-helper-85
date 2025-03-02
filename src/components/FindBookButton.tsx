@@ -14,15 +14,15 @@ const FindBookButton: React.FC<FindBookButtonProps> = ({
   return (
     <button
       className={cn(
-        "bg-litflix-mediumGreen text-white font-medium py-3 px-8 rounded-full",
-        "shadow-md transition-all duration-300 ease-out",
+        "bg-litflix-mediumGreen text-white font-medium py-3 px-12 rounded-full",
+        "shadow-md transition-all duration-300 ease-out text-xl tracking-wide",
         "hover:shadow-lg hover:bg-litflix-darkGreen active:scale-[0.98]",
-        "animate-fade-in",
+        "uppercase",
         className
       )}
       onClick={onClick}
     >
-      НАЙТИ КНИГУ
+      Найти книгу
     </button>
   );
 };
