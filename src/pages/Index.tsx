@@ -1,15 +1,12 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '@/components/Header';
 import FindBookButton from '@/components/FindBookButton';
-import SearchBar from '@/components/SearchBar';
 import BookCard from '@/components/BookCard';
 import { toast } from 'sonner';
 
 const Index = () => {
   const navigate = useNavigate();
-  const [showSearch, setShowSearch] = useState(false);
   
   // Mock book data
   const books = [
@@ -28,12 +25,6 @@ const Index = () => {
     navigate('/questionnaire');
   };
 
-  const handleSearch = (query: string) => {
-    toast.success(`Поиск по запросу: ${query}`);
-    // In a real app, this would search the database
-    navigate('/books');
-  };
-
   const handleBookClick = (id: number) => {
     toast.info(`Выбрана книга ${id}`);
     // In a real app, this would show details or select the book
@@ -41,19 +32,19 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-litflix-cream">
-      {/* Background image */}
+      {/* Background image with overlay */}
       <div className="absolute inset-0 -z-10">
         <img 
           src="/lovable-uploads/dd4f5308-4d1e-4ec1-a29d-c90913eeebe1.png" 
           alt="Cozy reading space" 
-          className="w-full h-full object-cover opacity-60"
+          className="w-full h-full object-cover opacity-70"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-litflix-paleYellow/30 to-litflix-paleYellow/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-litflix-cream/30 to-litflix-cream/70" />
       </div>
 
-      {/* Simple header with just the logo */}
-      <div className="pt-6 pb-4 text-center">
-        <h1 className="text-5xl md:text-6xl font-serif font-bold text-litflix-darkGreen tracking-wider">
+      {/* BOOKS logo */}
+      <div className="pt-10 pb-6 text-center">
+        <h1 className="text-7xl font-serif font-bold tracking-wider inline-block">
           <span className="text-litflix-darkGreen">B</span>
           <span className="text-litflix-darkGreen relative">
             <span className="absolute text-xs top-2 right-0">R.</span>
@@ -68,14 +59,14 @@ const Index = () => {
         </h1>
       </div>
       
-      <main className="container mx-auto px-4 pt-4 pb-20">
+      <main className="container mx-auto px-4 pt-8 pb-20">
         {/* Find Book Button centered */}
-        <div className="flex justify-center mb-16 pt-10">
+        <div className="flex justify-center mb-14 pt-6">
           <FindBookButton onClick={handleFindBook} />
         </div>
 
         {/* Book cards grid */}
-        <div className="grid grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-3 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
           {books.map((book) => (
             <BookCard
               key={book.id}
