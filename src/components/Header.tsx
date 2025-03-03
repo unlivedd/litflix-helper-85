@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { Search, Camera } from 'lucide-react';
+import { Search, Camera, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   onSearchClick?: () => void;
@@ -12,6 +13,17 @@ const Header: React.FC<HeaderProps> = ({
   onSearchClick,
   className 
 }) => {
+  const navigate = useNavigate();
+
+  const handleSearchClick = () => {
+    if (onSearchClick) {
+      onSearchClick();
+    } else {
+      // If no custom search handler is provided, navigate to books page
+      navigate('/books');
+    }
+  };
+
   return (
     <header className={cn("w-full py-4 px-6 flex justify-between items-center", className)}>
       <h1 className="text-3xl font-serif font-bold text-litflix-darkGreen tracking-tighter">
@@ -30,11 +42,18 @@ const Header: React.FC<HeaderProps> = ({
       
       <div className="flex items-center space-x-4">
         <button 
-          onClick={onSearchClick}
+          onClick={handleSearchClick}
           className="rounded-full bg-litflix-mediumGreen/20 p-2 text-litflix-darkGreen hover:bg-litflix-mediumGreen/30 transition-colors"
           aria-label="Search"
         >
           <Search size={20} />
+        </button>
+        <button 
+          onClick={() => navigate('/favorites')}
+          className="rounded-full bg-litflix-mediumGreen/20 p-2 text-litflix-darkGreen hover:bg-litflix-mediumGreen/30 transition-colors"
+          aria-label="Favorites"
+        >
+          <Heart size={20} />
         </button>
         <button 
           className="rounded-full bg-litflix-mediumGreen/20 p-2 text-litflix-darkGreen hover:bg-litflix-mediumGreen/30 transition-colors"

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -7,7 +6,6 @@ import { Heart, Star, ChevronDown, ChevronUp, Share2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { isInFavorites, toggleFavorite } from '@/lib/favoritesService';
 
-// Enhanced movie data with more details
 const mockMovies = [
   { 
     id: 1, 
@@ -66,7 +64,7 @@ const mockMovies = [
     title: 'Идиот',
     director: 'Владимир Бортко',
     year: 2003,
-    description: 'Экранизация романа Фёдора Достоевского. История князя Мышкина, возвращающегося в Россию после лечения в Швейцарии, и его взаимоотношений с обществом.',
+    description: 'Экранизация романа Фёдора Достоевского. История князя Мышкина, возвращающегося в Ро��сию после лечения в Швейцарии, и его взаимоотношений с обществом.',
     matchScore: 79,
     rating: 4.5,
     genre: 'Драма',
@@ -83,13 +81,11 @@ const Recommendations = () => {
   const [expandedMovieId, setExpandedMovieId] = useState<number | null>(null);
   const [favorites, setFavorites] = useState<Record<number, boolean>>({});
   
-  // Animation decorations
   const circlePositions = [
     { size: '500px', left: '-100px', top: '200px', delay: '0s' },
     { size: '600px', right: '-150px', bottom: '-150px', delay: '0.3s' },
   ];
 
-  // Load initial favorites status
   useEffect(() => {
     const initialFavorites: Record<number, boolean> = {};
     mockMovies.forEach(movie => {
@@ -98,7 +94,6 @@ const Recommendations = () => {
     setFavorites(initialFavorites);
   }, []);
 
-  // Simulate loading recommendations
   useEffect(() => {
     const timer = setTimeout(() => {
       setRecommendations(mockMovies);
@@ -130,7 +125,6 @@ const Recommendations = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <div 
           className="absolute inset-0 bg-cover bg-center opacity-10"
@@ -139,7 +133,6 @@ const Recommendations = () => {
         <div className="absolute inset-0 bg-litflix-cream bg-opacity-70" />
       </div>
 
-      {/* Animated background circles */}
       {circlePositions.map((circle, index) => (
         <div
           key={index}
@@ -161,6 +154,14 @@ const Recommendations = () => {
       <main className="container max-w-5xl mx-auto px-4 pt-8 pb-20 relative z-10">
         <div className="flex justify-between items-center mb-10">
           <BackButton onClick={() => navigate('/books')} />
+          
+          <button
+            onClick={() => navigate('/favorites')}
+            className="flex items-center space-x-2 text-litflix-mediumGreen hover:text-litflix-darkGreen"
+          >
+            <Heart size={20} />
+            <span>Избранное</span>
+          </button>
         </div>
         
         <h2 className="text-3xl font-serif font-semibold text-litflix-darkGreen mb-8 text-center">
@@ -301,7 +302,7 @@ const Recommendations = () => {
           </div>
         )}
         
-        <div className="flex justify-center mt-10">
+        <div className="flex justify-center mt-10 space-x-4">
           <button
             onClick={() => navigate('/')}
             className="bg-litflix-mediumGreen text-white font-medium py-3 px-8 rounded-full
@@ -309,6 +310,15 @@ const Recommendations = () => {
                      hover:shadow-lg hover:bg-litflix-darkGreen active:scale-[0.98]"
           >
             Вернуться на главную
+          </button>
+          
+          <button
+            onClick={() => navigate('/favorites')}
+            className="bg-white text-litflix-mediumGreen font-medium py-3 px-8 rounded-full
+                     border border-litflix-mediumGreen shadow-md transition-all duration-300 ease-out
+                     hover:bg-litflix-mediumGreen/10 active:scale-[0.98]"
+          >
+            Перейти в избранное
           </button>
         </div>
       </main>

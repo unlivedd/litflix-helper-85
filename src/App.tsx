@@ -9,6 +9,7 @@ import Books from "./pages/Books";
 import BookDetail from "./pages/BookDetail";
 import Questionnaire from "./pages/Questionnaire";
 import Recommendations from "./pages/Recommendations";
+import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/book/:id" element={<BookDetail />} />
           <Route path="/questionnaire" element={<Questionnaire />} />
           <Route path="/recommendations" element={<Recommendations />} />
+          <Route path="/favorites" element={<Favorites />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

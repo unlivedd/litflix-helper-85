@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
@@ -12,6 +12,8 @@ const Books = () => {
   const navigate = useNavigate();
   const [books, setBooks] = useState<Book[]>(getAllBooks());
   const [selectedBooks, setSelectedBooks] = useState<number[]>([]);
+  const [showSearch, setShowSearch] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
   
   // Animation decorations
   const circlePositions = [
@@ -48,6 +50,16 @@ const Books = () => {
     navigate('/recommendations');
   };
 
+  const toggleSearchVisibility = () => {
+    setShowSearch(prev => !prev);
+    // Scroll to search bar when it becomes visible
+    if (!showSearch && searchRef.current) {
+      setTimeout(() => {
+        searchRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    }
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden bg-litflix-cream">
       {/* Animated background circles */}
@@ -67,14 +79,16 @@ const Books = () => {
         />
       ))}
 
-      <Header />
+      <Header onSearchClick={toggleSearchVisibility} />
       
       <main className="container max-w-5xl mx-auto px-4 pt-8 pb-20">
         <div className="flex justify-between items-center mb-6">
           <BackButton onClick={() => navigate('/')} />
         </div>
         
-        <SearchBar onSearch={handleSearch} className="mb-10" />
+        <div ref={searchRef} className={`transition-all duration-300 ease-in-out overflow-hidden ${showSearch ? 'max-h-20 opacity-100 mb-10' : 'max-h-0 opacity-0'}`}>
+          <SearchBar onSearch={handleSearch} />
+        </div>
         
         <h2 className="text-2xl font-serif font-semibold text-litflix-darkGreen mb-6">
           Выберите книги, которые вам нравятся
@@ -101,7 +115,7 @@ const Books = () => {
           </div>
         )}
         
-        <div className="flex justify-center">
+        <div className="flex justify-center space-x-4">
           <button
             onClick={handleFindRecommendations}
             className="bg-litflix-mediumGreen text-white font-medium py-3 px-8 rounded-full
@@ -109,6 +123,15 @@ const Books = () => {
                      hover:shadow-lg hover:bg-litflix-darkGreen active:scale-[0.98]"
           >
             Найти рекомендации
+          </button>
+          
+          <button
+            onClick={() => navigate('/favorites')}
+            className="bg-white text-litflix-mediumGreen font-medium py-3 px-8 rounded-full
+                     border border-litflix-mediumGreen shadow-md transition-all duration-300 ease-out
+                     hover:bg-litflix-mediumGreen/10 active:scale-[0.98]"
+          >
+            Избранное
           </button>
         </div>
       </main>
