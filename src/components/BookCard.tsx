@@ -2,7 +2,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
-import { Info } from 'lucide-react';
+import { Info, Heart } from 'lucide-react';
 
 interface BookCardProps {
   title: string;
@@ -41,6 +41,22 @@ const BookCard: React.FC<BookCardProps> = ({
       onClick={onClick}
     >
       <div className="book-cover flex-grow flex items-center justify-center p-5 bg-litflix-paleYellow rounded-t-2xl relative">
+        {/* Heart icon for selection state */}
+        <button
+          className={cn(
+            "absolute top-2 left-2 p-1.5 rounded-full transition-all duration-300",
+            selected 
+              ? "text-white bg-litflix-darkGreen" 
+              : "text-litflix-darkGreen/70 bg-white/50 hover:bg-white/80"
+          )}
+          onClick={(e) => {
+            e.stopPropagation();
+            onClick?.();
+          }}
+        >
+          <Heart size={16} fill={selected ? "white" : "none"} />
+        </button>
+
         {id && (
           <button 
             onClick={handleInfoClick}

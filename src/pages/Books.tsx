@@ -84,6 +84,7 @@ const Books = () => {
           {books.map(book => (
             <BookCard
               key={book.id}
+              id={book.id}
               title={book.title}
               author={book.author}
               selected={selectedBooks.includes(book.id)}
@@ -91,6 +92,14 @@ const Books = () => {
             />
           ))}
         </div>
+        
+        {selectedBooks.length > 0 && (
+          <div className="mb-6 p-4 bg-litflix-paleYellow/50 rounded-lg">
+            <p className="text-litflix-darkGreen text-center">
+              Выбрано книг: <span className="font-bold">{selectedBooks.length}</span>
+            </p>
+          </div>
+        )}
         
         <div className="flex justify-center">
           <button
