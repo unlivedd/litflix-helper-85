@@ -1,6 +1,8 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
+import { Info } from 'lucide-react';
 
 interface BookCardProps {
   title: string;
@@ -8,6 +10,7 @@ interface BookCardProps {
   onClick?: () => void;
   selected?: boolean;
   className?: string;
+  id?: number;
 }
 
 const BookCard: React.FC<BookCardProps> = ({
@@ -16,7 +19,17 @@ const BookCard: React.FC<BookCardProps> = ({
   onClick,
   selected = false,
   className,
+  id
 }) => {
+  const navigate = useNavigate();
+  
+  const handleInfoClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (id) {
+      navigate(`/book/${id}`);
+    }
+  };
+
   return (
     <div 
       className={cn(
@@ -27,7 +40,15 @@ const BookCard: React.FC<BookCardProps> = ({
       )}
       onClick={onClick}
     >
-      <div className="book-cover flex-grow flex items-center justify-center p-5 bg-litflix-paleYellow rounded-t-2xl">
+      <div className="book-cover flex-grow flex items-center justify-center p-5 bg-litflix-paleYellow rounded-t-2xl relative">
+        {id && (
+          <button 
+            onClick={handleInfoClick}
+            className="absolute top-2 right-2 text-litflix-darkGreen/70 hover:text-litflix-darkGreen p-1 rounded-full bg-white/50 hover:bg-white/80 transition-colors"
+          >
+            <Info size={16} />
+          </button>
+        )}
         <div className="text-center">
           <h3 className="font-serif font-semibold text-xl text-litflix-darkGreen line-clamp-2">{title}</h3>
           <p className="text-sm text-litflix-darkGreen/70 mt-2 italic">{author}</p>

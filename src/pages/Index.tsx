@@ -1,28 +1,19 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import FindBookButton from '@/components/FindBookButton';
 import BookCard from '@/components/BookCard';
 import { toast } from 'sonner';
+import { getAllBooks } from '@/lib/bookService';
 
 const Index = () => {
   const navigate = useNavigate();
   
-  // Mock book data
-  const books = [
-    { id: 1, title: 'Книга 1', author: 'Автор 1' },
-    { id: 2, title: 'Книга 2', author: 'Автор 2' },
-    { id: 3, title: 'Книга 3', author: 'Автор 3' },
-    { id: 4, title: 'Книга 4', author: 'Автор 4' },
-    { id: 5, title: 'Книга 5', author: 'Автор 5' },
-    { id: 6, title: 'Книга 6', author: 'Автор 6' },
-    { id: 7, title: 'Книга 7', author: 'Автор 7' },
-    { id: 8, title: 'Книга 8', author: 'Автор 8' },
-    { id: 9, title: 'Книга 9', author: 'Автор 9' },
-  ];
+  // Get books from our service
+  const books = getAllBooks().slice(0, 9); // Just show first 9 books on homepage
 
   const handleFindBook = () => {
-    navigate('/questionnaire');
+    navigate('/books');
   };
 
   const handleBookClick = (id: number) => {
@@ -78,6 +69,7 @@ const Index = () => {
           {books.map((book) => (
             <BookCard
               key={book.id}
+              id={book.id}
               title={book.title}
               author={book.author}
               onClick={() => handleBookClick(book.id)}

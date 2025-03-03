@@ -6,22 +6,11 @@ import BackButton from '@/components/BackButton';
 import SearchBar from '@/components/SearchBar';
 import BookCard from '@/components/BookCard';
 import { toast } from 'sonner';
-
-// Mock data for books
-const mockBooks = [
-  { id: 1, title: 'Война и мир', author: 'Лев Толстой' },
-  { id: 2, title: 'Преступление и наказание', author: 'Фёдор Достоевский' },
-  { id: 3, title: 'Мастер и Маргарита', author: 'Михаил Булгаков' },
-  { id: 4, title: 'Анна Каренина', author: 'Лев Толстой' },
-  { id: 5, title: 'Идиот', author: 'Фёдор Достоевский' },
-  { id: 6, title: 'Евгений Онегин', author: 'Александр Пушкин' },
-  { id: 7, title: 'Тихий Дон', author: 'Михаил Шолохов' },
-  { id: 8, title: 'Герой нашего времени', author: 'Михаил Лермонтов' },
-  { id: 9, title: 'Мёртвые души', author: 'Николай Гоголь' },
-];
+import { Book, searchBooks, getAllBooks } from '@/lib/bookService';
 
 const Books = () => {
   const navigate = useNavigate();
+  const [books, setBooks] = useState<Book[]>(getAllBooks());
   const [selectedBooks, setSelectedBooks] = useState<number[]>([]);
   
   // Animation decorations
@@ -31,8 +20,14 @@ const Books = () => {
   ];
 
   const handleSearch = (query: string) => {
-    toast.success(`Поиск по запросу: ${query}`);
-    // In a real app, this would filter the books
+    if (query.trim() === '') {
+      setBooks(getAllBooks());
+      return;
+    }
+    
+    const results = searchBooks(query);
+    setBooks(results);
+    toast.success(`Найдено ${results.length} книг по запросу: ${query}`);
   };
 
   const toggleBookSelection = (id: number) => {
@@ -54,7 +49,7 @@ const Books = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden bg-litflix-cream">
       {/* Animated background circles */}
       {circlePositions.map((circle, index) => (
         <div
@@ -86,7 +81,7 @@ const Books = () => {
         </h2>
         
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-10">
-          {mockBooks.map(book => (
+          {books.map(book => (
             <BookCard
               key={book.id}
               title={book.title}
