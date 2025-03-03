@@ -1,15 +1,40 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
 import { getBookById } from '@/lib/bookService';
-import { Star } from 'lucide-react';
+import { Star, Heart, Share2 } from 'lucide-react';
+import { isInFavorites, toggleFavorite } from '@/lib/favoritesService';
+import { toast } from 'sonner';
 
 const BookDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const book = getBookById(Number(id));
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    if (book) {
+      setIsFavorite(isInFavorites(book.id, 'book'));
+    }
+  }, [book]);
+
+  const handleToggleFavorite = () => {
+    if (book) {
+      const newStatus = toggleFavorite({
+        id: book.id,
+        type: 'book',
+        title: book.title
+      });
+      setIsFavorite(newStatus);
+      toast.success(newStatus ? 'Добавлено в избранное' : 'Удалено из избранного');
+    }
+  };
+
+  const handleShare = () => {
+    toast.info('Функция обмена пока недоступна');
+  };
 
   if (!book) {
     return (
@@ -28,10 +53,19 @@ const BookDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-litflix-cream">
+    <div className="min-h-screen bg-litflix-cream relative overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0 z-0">
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-10"
+          style={{ backgroundImage: 'url("/lovable-uploads/866a95ab-8797-46f9-b963-5b5baaeae416.png")' }}
+        />
+        <div className="absolute inset-0 bg-litflix-cream bg-opacity-70" />
+      </div>
+
       <Header />
       
-      <main className="container mx-auto px-4 pt-8 pb-20">
+      <main className="container mx-auto px-4 pt-8 pb-20 relative z-10">
         <div className="mb-6">
           <BackButton onClick={() => navigate('/books')} />
         </div>
@@ -48,25 +82,28 @@ const BookDetail = () => {
             </div>
             
             <div className="p-8 md:w-2/3">
-              <div className="flex items-center mb-4">
-                <div className="flex">
-                  {Array(5).fill(0).map((_, i) => (
-                    <Star 
-                      key={i} 
-                      className={i < Math.floor(book.rating || 0) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"} 
-                      size={20} 
-                    />
-                  ))}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <div className="flex">
+                    {Array(5).fill(0).map((_, i) => (
+                      <Star 
+                        key={i} 
+                        className={i < Math.floor(book.rating || 0) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"} 
+                        size={20} 
+                      />
+                    ))}
+                  </div>
+                  <span className="ml-2 text-litflix-darkGreen/80">{book.rating}/5</span>
                 </div>
-                <span className="ml-2 text-litflix-darkGreen/80">{book.rating}/5</span>
+                
+                <div className="text-litflix-darkGreen/70 text-sm">
+                  Год издания: <span className="font-medium">{book.year}</span>
+                </div>
               </div>
               
               <div className="mb-4">
                 <span className="inline-block bg-litflix-lightGreen/30 text-litflix-darkGreen px-3 py-1 rounded-full text-sm">
                   {book.genre}
-                </span>
-                <span className="inline-block ml-2 text-litflix-darkGreen/70 text-sm">
-                  {book.year}
                 </span>
               </div>
               
@@ -75,15 +112,33 @@ const BookDetail = () => {
                 {book.description}
               </p>
               
-              <div className="flex space-x-4">
+              <div className="mt-8 border-t pt-4 border-litflix-lightGreen/20">
+                <h3 className="text-lg font-serif font-semibold text-litflix-darkGreen mb-3">Почему стоит прочитать:</h3>
+                <ul className="list-disc list-inside text-litflix-darkGreen/80 space-y-2">
+                  <li>Культовое произведение русской литературы</li>
+                  <li>Глубокий психологический анализ персонажей</li>
+                  <li>Исторический контекст эпохи</li>
+                  <li>Влияние на мировую культуру и искусство</li>
+                </ul>
+              </div>
+              
+              <div className="flex space-x-4 mt-8">
                 <button 
-                  className="bg-litflix-mediumGreen text-white px-6 py-2 rounded-full hover:bg-litflix-darkGreen transition-colors"
+                  className={`flex items-center gap-2 px-6 py-2 rounded-full transition-colors ${
+                    isFavorite 
+                      ? "bg-litflix-darkGreen text-white" 
+                      : "border border-litflix-mediumGreen text-litflix-mediumGreen hover:bg-litflix-mediumGreen/10"
+                  }`}
+                  onClick={handleToggleFavorite}
                 >
-                  Добавить в избранное
+                  <Heart size={18} fill={isFavorite ? "white" : "none"} />
+                  {isFavorite ? 'В избранном' : 'Добавить в избранное'}
                 </button>
                 <button 
-                  className="border border-litflix-mediumGreen text-litflix-mediumGreen px-6 py-2 rounded-full hover:bg-litflix-mediumGreen/10 transition-colors"
+                  className="border border-litflix-mediumGreen text-litflix-mediumGreen px-6 py-2 rounded-full hover:bg-litflix-mediumGreen/10 transition-colors flex items-center gap-2"
+                  onClick={handleShare}
                 >
+                  <Share2 size={18} />
                   Поделиться
                 </button>
               </div>
