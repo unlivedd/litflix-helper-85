@@ -2,7 +2,7 @@
 import React from 'react';
 import { Search, Camera, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface HeaderProps {
   onSearchClick?: () => void;
@@ -14,6 +14,8 @@ const Header: React.FC<HeaderProps> = ({
   className 
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isRecommendationsPage = location.pathname === '/recommendations';
 
   const handleSearchClick = () => {
     if (onSearchClick) {
@@ -40,28 +42,30 @@ const Header: React.FC<HeaderProps> = ({
         <span className="text-litflix-darkGreen">S</span>
       </h1>
       
-      <div className="flex items-center space-x-4">
-        <button 
-          onClick={handleSearchClick}
-          className="rounded-full bg-litflix-mediumGreen/20 p-2 text-litflix-darkGreen hover:bg-litflix-mediumGreen/30 transition-colors"
-          aria-label="Search"
-        >
-          <Search size={20} />
-        </button>
-        <button 
-          onClick={() => navigate('/favorites')}
-          className="rounded-full bg-litflix-mediumGreen/20 p-2 text-litflix-darkGreen hover:bg-litflix-mediumGreen/30 transition-colors"
-          aria-label="Favorites"
-        >
-          <Heart size={20} />
-        </button>
-        <button 
-          className="rounded-full bg-litflix-mediumGreen/20 p-2 text-litflix-darkGreen hover:bg-litflix-mediumGreen/30 transition-colors"
-          aria-label="Video recommendations"
-        >
-          <Camera size={20} />
-        </button>
-      </div>
+      {!isRecommendationsPage && (
+        <div className="flex items-center space-x-4">
+          <button 
+            onClick={handleSearchClick}
+            className="rounded-full bg-litflix-mediumGreen/20 p-2 text-litflix-darkGreen hover:bg-litflix-mediumGreen/30 transition-colors"
+            aria-label="Search"
+          >
+            <Search size={20} />
+          </button>
+          <button 
+            onClick={() => navigate('/favorites')}
+            className="rounded-full bg-litflix-mediumGreen/20 p-2 text-litflix-darkGreen hover:bg-litflix-mediumGreen/30 transition-colors"
+            aria-label="Favorites"
+          >
+            <Heart size={20} />
+          </button>
+          <button 
+            className="rounded-full bg-litflix-mediumGreen/20 p-2 text-litflix-darkGreen hover:bg-litflix-mediumGreen/30 transition-colors"
+            aria-label="Video recommendations"
+          >
+            <Camera size={20} />
+          </button>
+        </div>
+      )}
     </header>
   );
 };
