@@ -125,12 +125,13 @@ const Recommendations = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-10"
-          style={{ backgroundImage: 'url("/lovable-uploads/c1af6f80-b0f1-4042-994f-f01bab5c20fd.png")' }}
+      <div className="page-background">
+        <img 
+          src="/lovable-uploads/27039ed7-4413-4b5d-be3a-4bef97e77d6a.png" 
+          alt="Cozy book corner" 
+          className="page-background-image opacity-70"
         />
-        <div className="absolute inset-0 bg-litflix-cream bg-opacity-70" />
+        <div className="page-background-overlay" />
       </div>
 
       {circlePositions.map((circle, index) => (

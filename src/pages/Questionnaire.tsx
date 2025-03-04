@@ -57,6 +57,16 @@ const Questionnaire = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
+      {/* Background image with overlay */}
+      <div className="page-background">
+        <img 
+          src="/lovable-uploads/2d79c713-e142-4111-834f-1b7d4de0ba52.png" 
+          alt="Books with modern interior" 
+          className="page-background-image opacity-70"
+        />
+        <div className="page-background-overlay" />
+      </div>
+
       {/* Animated background circles */}
       {circlePositions.map((circle, index) => (
         <div

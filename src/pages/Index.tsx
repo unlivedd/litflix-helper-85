@@ -30,13 +30,13 @@ const Index = () => {
       <div className="book-decoration book-right"></div>
 
       {/* Background image with overlay */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
+      <div className="page-background">
         <img 
-          src="/lovable-uploads/ff1e5352-5f90-4725-bd76-f900ee33d4ed.png" 
+          src="/lovable-uploads/117cd767-a1f6-4f8f-9219-f52549ac689b.png" 
           alt="Cozy living room with books" 
-          className="w-full h-full object-cover opacity-70"
+          className="page-background-image opacity-80"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-litflix-cream/80 via-litflix-cream/60 to-litflix-cream/80" />
+        <div className="page-background-overlay" />
       </div>
 
       {/* BOOKS logo */}

@@ -16,8 +16,18 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-litflix-cream px-4">
-      <div className="text-center max-w-md">
+    <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div className="page-background">
+        <img 
+          src="/lovable-uploads/6bd4d17c-d1eb-4359-95ec-30b5ffc3d9f8.png" 
+          alt="Background with books" 
+          className="page-background-image opacity-30"
+        />
+        <div className="absolute inset-0 bg-litflix-cream/80" />
+      </div>
+      
+      <div className="text-center max-w-md relative z-10">
         <h1 className="text-6xl font-serif font-bold text-litflix-darkGreen mb-4">404</h1>
         <p className="text-xl text-litflix-darkGreen/80 mb-8">
           Упс! Страница не найдена

@@ -62,6 +62,16 @@ const Books = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-litflix-cream">
+      {/* Background image with overlay */}
+      <div className="page-background">
+        <img 
+          src="/lovable-uploads/1e4b35df-8f96-4d6c-8aae-98d8a370407f.png" 
+          alt="Books with plants" 
+          className="page-background-image opacity-60"
+        />
+        <div className="page-background-overlay" />
+      </div>
+
       {/* Animated background circles */}
       {circlePositions.map((circle, index) => (
         <div

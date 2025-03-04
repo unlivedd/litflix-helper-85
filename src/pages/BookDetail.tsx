@@ -55,12 +55,13 @@ const BookDetail = () => {
   return (
     <div className="min-h-screen bg-litflix-cream relative overflow-hidden">
       {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-10"
-          style={{ backgroundImage: 'url("/lovable-uploads/866a95ab-8797-46f9-b963-5b5baaeae416.png")' }}
+      <div className="page-background">
+        <img 
+          src="/lovable-uploads/6bd4d17c-d1eb-4359-95ec-30b5ffc3d9f8.png" 
+          alt="Cozy reading corner with books" 
+          className="page-background-image opacity-65"
         />
-        <div className="absolute inset-0 bg-litflix-cream bg-opacity-70" />
+        <div className="page-background-overlay" />
       </div>
 
       <Header />
@@ -70,7 +71,7 @@ const BookDetail = () => {
           <BackButton onClick={() => navigate('/books')} />
         </div>
         
-        <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-md overflow-hidden">
+        <div className="max-w-4xl mx-auto bg-white/90 backdrop-blur-sm rounded-2xl shadow-md overflow-hidden">
           <div className="md:flex">
             <div className="md:flex-shrink-0 bg-litflix-paleYellow p-8 flex items-center justify-center md:w-1/3">
               <div className="book-cover-large">

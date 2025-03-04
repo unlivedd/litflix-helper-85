@@ -45,12 +45,13 @@ const Favorites = () => {
   return (
     <div className="min-h-screen bg-litflix-cream relative overflow-hidden">
       {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-10"
-          style={{ backgroundImage: 'url("/lovable-uploads/866a95ab-8797-46f9-b963-5b5baaeae416.png")' }}
+      <div className="page-background">
+        <img 
+          src="/lovable-uploads/de587bfc-46b3-4fd1-98b2-f5fea3c8c404.png" 
+          alt="Books on table" 
+          className="page-background-image opacity-60"
         />
-        <div className="absolute inset-0 bg-litflix-cream bg-opacity-70" />
+        <div className="page-background-overlay" />
       </div>
 
       <Header />
