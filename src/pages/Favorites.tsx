@@ -3,17 +3,17 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
-import { getFavorites, removeFromFavorites } from '@/lib/favoritesService';
+import { getAllFavorites, toggleFavorite, FavoriteItem } from '@/lib/favoritesService';
 import { Heart, Trash2, Book, Film } from 'lucide-react';
 import { toast } from 'sonner';
 
 const Favorites = () => {
   const navigate = useNavigate();
-  const [favorites, setFavorites] = useState<Array<{id: number; type: 'book' | 'movie'; title: string}>>([]);
+  const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
   
   useEffect(() => {
     const loadFavorites = () => {
-      const favoritesData = getFavorites();
+      const favoritesData = getAllFavorites();
       setFavorites(favoritesData);
     };
     
@@ -28,7 +28,17 @@ const Favorites = () => {
   }, []);
   
   const handleRemoveFavorite = (id: number, type: 'book' | 'movie') => {
-    removeFromFavorites(id, type);
+    // Create a favorite item to toggle (remove)
+    const itemToRemove: FavoriteItem = {
+      id,
+      type,
+      title: favorites.find(item => item.id === id && item.type === type)?.title || ''
+    };
+    
+    // Use toggleFavorite to remove the item
+    toggleFavorite(itemToRemove);
+    
+    // Update state
     setFavorites(prev => prev.filter(item => !(item.id === id && item.type === type)));
     toast.success('Удалено из избранного');
   };
