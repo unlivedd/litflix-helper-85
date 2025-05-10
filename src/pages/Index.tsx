@@ -2,6 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import FindBookButton from '@/components/FindBookButton';
+import FindMovieButton from '@/components/FindMovieButton';
 import BookCard from '@/components/BookCard';
 import { toast } from 'sonner';
 import { getAllBooks } from '@/lib/bookService';
@@ -16,6 +17,13 @@ const Index = () => {
 
   const handleFindBook = () => {
     navigate('/books');
+  };
+  
+  const handleFindMovie = () => {
+    // Устанавливаем тип рекомендаций как "books" (книги на основе фильмов)
+    sessionStorage.setItem('recommendationType', 'books');
+    navigate('/questionnaire');
+    toast.info('Вы выбрали получение рекомендаций книг на основе фильмов');
   };
 
   const handleBookClick = (id: number) => {
@@ -68,6 +76,7 @@ const Index = () => {
         {/* Action buttons */}
         <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-8 mb-16 pt-4">
           <FindBookButton onClick={handleFindBook} />
+          <FindMovieButton onClick={handleFindMovie} />
           
           <Button
             onClick={handleGetRecommendations}
