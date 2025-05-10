@@ -55,10 +55,11 @@ const Movies = () => {
     );
   };
 
-  const handleGoToQuestionnaire = () => {
+  const handleGoToRecommendations = () => {
+    // Вместо перехода на опрос, сразу перейти к рекомендациям
     sessionStorage.setItem('recommendationType', 'books');
-    navigate('/questionnaire');
-    toast.info('Переход к подбору книг на основе выбранных фильмов');
+    navigate('/recommendations');
+    toast.info('Переход к подобранным книгам на основе выбранных фильмов');
   };
 
   return (
@@ -85,7 +86,7 @@ const Movies = () => {
           </h1>
           
           <Button
-            onClick={handleGoToQuestionnaire}
+            onClick={handleGoToRecommendations}
             className="bg-litflix-mediumGreen hover:bg-litflix-darkGreen text-white px-6 py-3 rounded-full"
           >
             Подобрать книги

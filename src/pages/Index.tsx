@@ -31,6 +31,7 @@ const Index = () => {
 
   const handleGetRecommendations = () => {
     navigate('/recommendation-selector');
+    toast.info('Переход к выбору типа рекомендаций');
   };
 
   return (
