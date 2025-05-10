@@ -1,11 +1,13 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
-import { toast } from 'sonner';
-import { Film } from 'lucide-react';
+import { isInFavorites, toggleFavorite, FavoriteItem } from '@/lib/favoritesService';
+import { Film, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import { Card, CardContent } from '@/components/ui/card';
 
 // Dummy movie data (Replace with actual data in a real implementation)
 const dummyMovies = [
@@ -22,15 +24,41 @@ const dummyMovies = [
 
 const Movies = () => {
   const navigate = useNavigate();
+  const [favorites, setFavorites] = useState<Record<number, boolean>>({});
+
+  // Initialize favorites
+  useEffect(() => {
+    const initFavorites: Record<number, boolean> = {};
+    dummyMovies.forEach(movie => {
+      initFavorites[movie.id] = isInFavorites(movie.id, 'movie');
+    });
+    setFavorites(initFavorites);
+  }, []);
 
   const handleMovieSelect = (id: number) => {
-    // Save selected movie
-    toast.info(`Выбран фильм ${id}`);
+    const movie = dummyMovies.find(m => m.id === id);
+    if (!movie) return;
     
-    // Here you would add the movie to a selected list or favorites
-    // For now, we'll simulate moving to recommendations after selection
+    const favoriteItem: FavoriteItem = {
+      id: movie.id,
+      type: 'movie',
+      title: movie.title,
+      subtitle: `${movie.director}, ${movie.year}`
+    };
+    
+    const isFavorite = toggleFavorite(favoriteItem);
+    setFavorites(prev => ({...prev, [id]: isFavorite}));
+    
+    toast.success(isFavorite 
+      ? `"${movie.title}" добавлен в избранное` 
+      : `"${movie.title}" удален из избранного`
+    );
+  };
+
+  const handleGoToQuestionnaire = () => {
     sessionStorage.setItem('recommendationType', 'books');
     navigate('/questionnaire');
+    toast.info('Переход к подбору книг на основе выбранных фильмов');
   };
 
   return (
@@ -57,12 +85,8 @@ const Movies = () => {
           </h1>
           
           <Button
-            onClick={() => {
-              sessionStorage.setItem('recommendationType', 'books');
-              navigate('/questionnaire');
-              toast.info('Переход к подбору книг на основе выбранных фильмов');
-            }}
-            className="bg-litflix-mediumGreen hover:bg-litflix-darkGreen text-white px-6 py-2 rounded-full"
+            onClick={handleGoToQuestionnaire}
+            className="bg-litflix-mediumGreen hover:bg-litflix-darkGreen text-white px-6 py-3 rounded-full"
           >
             Подобрать книги
           </Button>
@@ -70,20 +94,38 @@ const Movies = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {dummyMovies.map((movie) => (
-            <div 
+            <Card 
               key={movie.id}
-              onClick={() => handleMovieSelect(movie.id)}
-              className="bg-white/80 backdrop-blur-sm rounded-lg p-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+              className="hover-lift bg-white/80 backdrop-blur-sm overflow-hidden border border-litflix-lightGreen/20"
             >
-              <div className="flex items-center gap-3 mb-2">
-                <Film className="text-litflix-darkGreen" size={20} />
-                <h3 className="text-lg font-medium text-litflix-darkGreen">{movie.title}</h3>
-              </div>
-              <div className="text-litflix-darkGreen/70 text-sm">
-                <p>Режиссер: {movie.director}</p>
-                <p>Год: {movie.year}</p>
-              </div>
-            </div>
+              <CardContent className="p-5">
+                <div className="flex justify-between items-start mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-full bg-litflix-lightGreen/30 text-litflix-darkGreen">
+                      <Film size={20} />
+                    </div>
+                    <h3 className="text-lg font-medium text-litflix-darkGreen">{movie.title}</h3>
+                  </div>
+                  
+                  <button 
+                    onClick={() => handleMovieSelect(movie.id)}
+                    className={`p-2 rounded-full ${
+                      favorites[movie.id] 
+                        ? 'bg-litflix-paleYellow text-litflix-darkGreen' 
+                        : 'bg-litflix-lightGreen/20 text-litflix-darkGreen/70'
+                    }`}
+                    aria-label={favorites[movie.id] ? "Удалить из избранного" : "Добавить в избранное"}
+                  >
+                    <Heart size={18} fill={favorites[movie.id] ? "currentColor" : "none"} />
+                  </button>
+                </div>
+                
+                <div className="text-litflix-darkGreen/70 text-sm">
+                  <p>Режиссер: {movie.director}</p>
+                  <p>Год: {movie.year}</p>
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </main>

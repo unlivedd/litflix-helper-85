@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import FindBookButton from '@/components/FindBookButton';
@@ -19,7 +20,7 @@ const Index = () => {
   };
   
   const handleFindMovie = () => {
-    // Navigate to the movies page (similar to books page)
+    // Navigate to the movies page
     navigate('/movies');
   };
 

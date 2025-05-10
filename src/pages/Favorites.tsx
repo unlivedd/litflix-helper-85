@@ -47,8 +47,8 @@ const Favorites = () => {
     if (type === 'book') {
       navigate(`/book/${id}`);
     } else {
-      // Currently, we don't have dedicated movie detail pages, so we just go to recommendations
-      navigate('/recommendations');
+      // Currently, we don't have dedicated movie detail pages
+      navigate('/movies');
     }
   };
 
