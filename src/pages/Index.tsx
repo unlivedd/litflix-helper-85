@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import FindBookButton from '@/components/FindBookButton';
@@ -20,10 +19,8 @@ const Index = () => {
   };
   
   const handleFindMovie = () => {
-    // Устанавливаем тип рекомендаций как "books" (книги на основе фильмов)
-    sessionStorage.setItem('recommendationType', 'books');
-    navigate('/questionnaire');
-    toast.info('Вы выбрали получение рекомендаций книг на основе фильмов');
+    // Navigate to the movies page (similar to books page)
+    navigate('/movies');
   };
 
   const handleBookClick = (id: number) => {
