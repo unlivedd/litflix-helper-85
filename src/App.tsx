@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Books from "./pages/Books";
 import BookDetail from "./pages/BookDetail";
 import Questionnaire from "./pages/Questionnaire";
+import RecommendationSelector from "./pages/RecommendationSelector";
 import Recommendations from "./pages/Recommendations";
 import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/books" element={<Books />} />
           <Route path="/book/:id" element={<BookDetail />} />
+          <Route path="/recommendation-selector" element={<RecommendationSelector />} />
           <Route path="/questionnaire" element={<Questionnaire />} />
           <Route path="/recommendations" element={<Recommendations />} />
           <Route path="/favorites" element={<Favorites />} />

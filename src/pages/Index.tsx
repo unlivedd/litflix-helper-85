@@ -5,6 +5,8 @@ import FindBookButton from '@/components/FindBookButton';
 import BookCard from '@/components/BookCard';
 import { toast } from 'sonner';
 import { getAllBooks } from '@/lib/bookService';
+import { Book, Film } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -19,6 +21,10 @@ const Index = () => {
   const handleBookClick = (id: number) => {
     toast.info(`Выбрана книга ${id}`);
     // In a real app, this would show details or select the book
+  };
+
+  const handleGetRecommendations = () => {
+    navigate('/recommendation-selector');
   };
 
   return (
@@ -59,9 +65,20 @@ const Index = () => {
       </div>
       
       <main className="container mx-auto px-4 pt-6 pb-20">
-        {/* Find Book Button centered */}
-        <div className="flex justify-center mb-16 pt-4">
+        {/* Action buttons */}
+        <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-8 mb-16 pt-4">
           <FindBookButton onClick={handleFindBook} />
+          
+          <Button
+            onClick={handleGetRecommendations}
+            className="bg-litflix-mediumGreen hover:bg-litflix-darkGreen text-white px-6 py-3 rounded-full flex items-center gap-3"
+          >
+            <div className="flex items-center gap-2">
+              <Book size={18} />
+              <Film size={18} />
+            </div>
+            <span>Получить рекомендации</span>
+          </Button>
         </div>
 
         {/* Book cards grid */}

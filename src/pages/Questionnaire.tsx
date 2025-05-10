@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
@@ -12,6 +12,15 @@ const TOTAL_STEPS = 10;
 const Questionnaire = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
+  const [recommendationType, setRecommendationType] = useState<'books' | 'movies'>('movies');
+  
+  // Check recommendation type on load
+  useEffect(() => {
+    const storedType = sessionStorage.getItem('recommendationType') as 'books' | 'movies';
+    if (storedType) {
+      setRecommendationType(storedType);
+    }
+  }, []);
   
   // Animation decorations
   const circlePositions = [
@@ -37,12 +46,12 @@ const Questionnaire = () => {
       // Scroll to top on mobile
       window.scrollTo(0, 0);
     } else {
-      navigate('/');
+      navigate('/recommendation-selector');
     }
   };
 
-  // Questions for each step
-  const questions = [
+  // Questions for each step - now dependent on recommendation type
+  const bookQuestions = [
     "Какой жанр литературы вам больше всего нравится?",
     "Предпочитаете ли вы классику или современную литературу?",
     "Какие эмоции вы хотите испытывать при чтении?",
@@ -54,6 +63,22 @@ const Questionnaire = () => {
     "Обращаете ли вы внимание на стиль письма?",
     "Какие авторы вам нравятся больше всего?"
   ];
+
+  const movieQuestions = [
+    "Какие жанры кино вам нравятся больше всего?",
+    "Предпочитаете ли вы классику кино или современные фильмы?",
+    "Какие эмоции вы хотите испытывать при просмотре?",
+    "Какой темп повествования в фильмах вам ближе?",
+    "Интересуют ли вас сложные сюжетные линии в кино?",
+    "Насколько важна для вас игра актеров?",
+    "Предпочитаете ли вы реалистичные фильмы или с фантастическими элементами?",
+    "Важно ли для вас культурное или историческое значение фильма?",
+    "Обращаете ли вы внимание на визуальный стиль и режиссуру?",
+    "Какие режиссеры вам нравятся больше всего?"
+  ];
+
+  const questions = recommendationType === 'books' ? bookQuestions : movieQuestions;
+  const questionText = questions[currentStep - 1];
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -97,9 +122,14 @@ const Questionnaire = () => {
         </div>
         
         <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-sm mb-8 animate-fade-in">
-          <h2 className="text-2xl font-serif font-semibold text-litflix-darkGreen mb-6">
-            {questions[currentStep - 1]}
-          </h2>
+          <div className="mb-6">
+            <span className="inline-block bg-litflix-lightGreen/30 text-litflix-darkGreen px-3 py-1 rounded-full text-sm mb-4">
+              {recommendationType === 'books' ? 'Рекомендации книг' : 'Рекомендации фильмов'}
+            </span>
+            <h2 className="text-2xl font-serif font-semibold text-litflix-darkGreen">
+              {questionText}
+            </h2>
+          </div>
           
           {/* Here is where your questionnaire content would go */}
           {/* For demonstration, I'll create a simple multiple choice */}
