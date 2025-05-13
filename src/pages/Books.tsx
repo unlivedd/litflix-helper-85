@@ -47,7 +47,10 @@ const Books = () => {
     }
     
     toast.success(`Выбрано книг: ${selectedBooks.length}`);
+    // Сохраняем тип рекомендаций и переходим прямо к рекомендациям
+    sessionStorage.setItem('recommendationType', 'movies');
     navigate('/recommendations');
+    toast.info('Переход к подобранным фильмам на основе выбранных книг');
   };
 
   const toggleSearchVisibility = () => {
@@ -132,7 +135,7 @@ const Books = () => {
                      shadow-md transition-all duration-300 ease-out
                      hover:shadow-lg hover:bg-litflix-darkGreen active:scale-[0.98]"
           >
-            Найти рекомендации
+            Подобрать фильмы
           </button>
           
           <button
