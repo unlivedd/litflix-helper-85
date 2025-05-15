@@ -103,11 +103,11 @@ const BookRating: React.FC<BookRatingProps> = ({
 
   if (useImages) {
     return (
-      <div className="flex flex-col items-center gap-2">
+      <div className="w-full">
         <img 
           src={getRatingImagePath(safeRating)} 
-          alt={`Рейтинг ${Math.round(safeRating)} из 10`} 
-          className="h-8 w-full object-contain"
+          alt={`Рейтинг ${Math.round(safeRating)} из 10`}
+          className="w-full h-auto object-contain"
           onError={(e) => {
             console.error("Error loading image:", e);
             const target = e.target as HTMLImageElement;
@@ -124,14 +124,8 @@ const BookRating: React.FC<BookRatingProps> = ({
             step={1}
             onValueChange={handleSliderChange}
             disabled={disabled}
-            className="w-full max-w-xs"
+            className="w-full mt-2"
           />
-        )}
-        
-        {showValue && (
-          <span className="text-litflix-darkGreen font-medium text-center">
-            {Math.round(safeRating)}/10
-          </span>
         )}
       </div>
     );
@@ -159,12 +153,6 @@ const BookRating: React.FC<BookRatingProps> = ({
           </button>
         ))}
       </div>
-      
-      {showValue && (
-        <span className="ml-2 text-litflix-darkGreen font-medium">
-          {Math.round(safeRating)}/10
-        </span>
-      )}
     </div>
   );
 };

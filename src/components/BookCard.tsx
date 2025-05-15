@@ -74,17 +74,13 @@ const BookCard: React.FC<BookCardProps> = ({
         </div>
       </div>
       <div className="relative">
-        <div className="book-spine h-12 bg-litflix-darkGreen rounded-b-2xl flex items-center justify-center">
+        <div className="book-spine h-12 bg-transparent rounded-b-2xl">
           {rating !== undefined && (
-            <div className="mx-auto w-4/5 -mt-1">
+            <div className="w-full h-full">
               <BookRating rating={rating} useImages={true} size="sm" />
             </div>
           )}
-          {rating === undefined && (
-            <div className="w-4/5 h-4 bg-white rounded-full mx-auto opacity-80"></div>
-          )}
         </div>
-        <div className="absolute -top-1.5 left-0 right-0 w-4/5 h-1 bg-white/90 rounded-full mx-auto"></div>
       </div>
     </div>
   );
