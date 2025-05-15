@@ -13,10 +13,6 @@ const TopRatedBooks = () => {
 
   return (
     <div className="mt-12 pb-16">
-      <h2 className="text-2xl font-serif font-semibold text-litflix-darkGreen text-center mb-8">
-        Рейтинг книг
-      </h2>
-      
       <div className="max-w-4xl mx-auto">
         {books.map((book, index) => (
           <div 

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Star } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
@@ -44,27 +45,27 @@ const BookRating: React.FC<BookRatingProps> = ({
   const getRatingImageId = (rating: number) => {
     switch (rating) {
       case 1:
-        return "ec4de521-5544-472d-973b-d6ec4e85abc0"; // Изображение для рейтинга 1
+        return "e307bbbb-8379-4ce7-bae6-70fb1b7cc32d"; // Изображение для рейтинга 1
       case 2:
-        return "39f72b27-0c19-4da6-bdd9-fb226f35d76d"; // Изображение для рейтинга 2
+        return "b42ac607-5b2e-40f6-989a-d2f6ba6fae77"; // Изображение для рейтинга 2
       case 3:
-        return "dd4f5308-4d1e-4ec1-a29d-c90913eeebe1"; // Изображение для рейтинга 3
+        return "17a4e21b-43b4-4445-9f9f-1be6b1ce5720"; // Изображение для рейтинга 3
       case 4:
-        return "ff1e5352-5f90-4725-bd76-f900ee33d4ed"; // Изображение для рейтинга 4
+        return "12f14d62-8f94-4aff-bcd6-7814c4ba45b3"; // Изображение для рейтинга 4
       case 5:
-        return "2d79c713-e142-4111-834f-1b7d4de0ba52"; // Изображение для рейтинга 5
+        return "4852c0fd-2c6c-4d5d-8a05-9e68e8b60e9f"; // Изображение для рейтинга 5
       case 6:
-        return "47ead0a4-2a24-4a17-be64-5e105ca7ea6e"; // Изображение для рейтинга 6
+        return "cf0ff9be-1066-4399-ab05-a56a41ea83f0"; // Изображение для рейтинга 6
       case 7:
-        return "27e701fb-2678-4df8-8791-c6265581d4de"; // Изображение для рейтинга 7
+        return "7348a675-1b95-453b-b305-211602e68223"; // Изображение для рейтинга 7
       case 8:
-        return "801dd961-ac22-45e4-9579-76888f612e3b"; // Изображение для рейтинга 8
+        return "64d0d4f4-cb59-4b61-acdc-78595ecdfd98"; // Изображение для рейтинга 8
       case 9:
-        return "a507fcc3-de12-4447-9478-f8ced88ce315"; // Изображение для рейтинга 9
+        return "58ccd607-72c7-49a3-875f-2e92d5b3d4c0"; // Изображение для рейтинга 9
       case 10:
-        return "48b4e597-20e2-4aa9-afd1-0d54cbf7f49a"; // Изображение для рейтинга 10
+        return "0f17b9e4-2b3f-4525-8426-71371a436264"; // Изображение для рейтинга 10
       default:
-        return "ec4de521-5544-472d-973b-d6ec4e85abc0"; // Значение по умолчанию
+        return "e307bbbb-8379-4ce7-bae6-70fb1b7cc32d"; // Значение по умолчанию
     }
   };
   
