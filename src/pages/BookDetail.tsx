@@ -119,7 +119,7 @@ const BookDetail = () => {
             <div className="p-8 md:w-2/3">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
-                  <BookRating rating={book.rating || 0} size="md" showValue />
+                  <BookRating rating={book.rating || 0} size="md" showValue useImages={true} />
                 </div>
                 
                 <div className="text-litflix-darkGreen/70 text-sm">
@@ -157,6 +157,7 @@ const BookDetail = () => {
                     showValue={true}
                     onRate={handleRateBook}
                     disabled={!isLoggedIn}
+                    useImages={true}
                   />
                   {!isLoggedIn && (
                     <p className="text-sm text-litflix-darkGreen/70 mt-2">

@@ -15,7 +15,9 @@ const Slider = React.forwardRef<
   // Determine the background gradient based on the rating
   // From orange (low rating) to green (high rating)
   const getGradientBackground = () => {
-    const percentage = ((rating - (props.min || 0)) / ((props.max || 10) - (props.min || 0))) * 100;
+    const min = props.min || 1;
+    const max = props.max || 10;
+    const percentage = ((rating - min) / (max - min)) * 100;
     return `linear-gradient(to right, 
       #f97316 0%, 
       #f97316 ${percentage/10}%, 
