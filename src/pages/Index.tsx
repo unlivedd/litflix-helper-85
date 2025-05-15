@@ -17,6 +17,12 @@ const Index = () => {
   // Get books from our service
   const books = getAllBooks().slice(0, 9); // Just show first 9 books on homepage
 
+  // Округляем рейтинги до целого числа для корректного отображения
+  const booksWithRoundedRatings = books.map(book => ({
+    ...book,
+    rating: book.rating ? Math.round(book.rating) : undefined
+  }));
+
   const handleFindBook = () => {
     navigate('/books');
   };
@@ -117,7 +123,7 @@ const Index = () => {
 
         {/* Book cards grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-          {books.map((book) => (
+          {booksWithRoundedRatings.map((book) => (
             <BookCard
               key={book.id}
               id={book.id}

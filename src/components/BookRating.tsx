@@ -55,15 +55,15 @@ const BookRating: React.FC<BookRatingProps> = ({
       case 5:
         return "2d79c713-e142-4111-834f-1b7d4de0ba52"; // Изображение для рейтинга 5
       case 6:
-        return "ec4de521-5544-472d-973b-d6ec4e85abc0"; // Изображение для рейтинга 6
+        return "a507fcc3-de12-4447-9478-f8ced88ce315"; // Изображение для рейтинга 6
       case 7:
-        return "992a74b1-a1f6-401a-9bd1-201ea844e191"; // Изображение для рейтинга 7
+        return "801dd961-ac22-45e4-9579-76888f612e3b"; // Изображение для рейтинга 7
       case 8:
-        return "8c3b4cb9-63de-46d9-923f-7f103708ac9d"; // Изображение для рейтинга 8
+        return "27e701fb-2678-4df8-8791-c6265581d4de"; // Изображение для рейтинга 8
       case 9:
-        return "b11028ef-50be-44c1-a5a3-37fa70703d4f"; // Изображение для рейтинга 9
+        return "47ead0a4-2a24-4a17-be64-5e105ca7ea6e"; // Изображение для рейтинга 9
       case 10:
-        return "f917757b-9e17-4b91-b2b8-5a5cdb48688c"; // Изображение для рейтинга 10
+        return "48b4e597-20e2-4aa9-afd1-0d54cbf7f49a"; // Изображение для рейтинга 10
       default:
         return "ec4de521-5544-472d-973b-d6ec4e85abc0"; // Значение по умолчанию
     }
@@ -114,7 +114,7 @@ const BookRating: React.FC<BookRatingProps> = ({
         
         {showValue && (
           <span className="text-litflix-darkGreen font-medium text-center">
-            {rating.toFixed(1)}/10
+            {Math.round(rating)}/10
           </span>
         )}
       </div>
@@ -146,7 +146,7 @@ const BookRating: React.FC<BookRatingProps> = ({
       
       {showValue && (
         <span className="ml-2 text-litflix-darkGreen font-medium">
-          {rating.toFixed(1)}/10
+          {Math.round(rating)}/10
         </span>
       )}
     </div>

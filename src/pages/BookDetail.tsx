@@ -63,7 +63,7 @@ const BookDetail = () => {
     userRatings[book.id] = rating;
     localStorage.setItem('userRatings', JSON.stringify(userRatings));
     
-    toast.success(`Вы оценили книгу на ${rating} из 10`);
+    toast.success(`Вы оценили книгу на ${Math.round(rating)} из 10`);
   };
 
   const handleShare = () => {
@@ -119,7 +119,7 @@ const BookDetail = () => {
             <div className="p-8 md:w-2/3">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
-                  <BookRating rating={book.rating || 0} size="md" showValue />
+                  <BookRating rating={Math.round(book.rating || 0)} size="md" showValue />
                 </div>
                 
                 <div className="text-litflix-darkGreen/70 text-sm">

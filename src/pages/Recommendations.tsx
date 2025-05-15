@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -251,15 +252,15 @@ const Recommendations = () => {
           
           <div className="flex items-center mt-2 mb-2">
             <div className="flex mr-4">
-              {Array(5).fill(0).map((_, i) => (
+              {Array(10).fill(0).map((_, i) => (
                 <Star 
                   key={i} 
-                  className={i < Math.floor(item.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"} 
+                  className={i < Math.round(item.rating * 2) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"} 
                   size={16} 
                 />
               ))}
             </div>
-            <span className="text-sm text-litflix-darkGreen/70">{item.rating}/5</span>
+            <span className="text-sm text-litflix-darkGreen/70">{Math.round(item.rating * 2)}/10</span>
             
             <div className="mx-3 h-4 border-r border-litflix-darkGreen/20"></div>
             
@@ -341,7 +342,7 @@ const Recommendations = () => {
         </div>
       );
     } else {
-      // Movie card (existing functionality)
+      // Movie card
       return (
         <div 
           key={item.id}
@@ -377,15 +378,15 @@ const Recommendations = () => {
           
           <div className="flex items-center mt-2 mb-2">
             <div className="flex mr-4">
-              {Array(5).fill(0).map((_, i) => (
+              {Array(10).fill(0).map((_, i) => (
                 <Star 
                   key={i} 
-                  className={i < Math.floor(item.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"} 
+                  className={i < Math.round(item.rating * 2) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"} 
                   size={16} 
                 />
               ))}
             </div>
-            <span className="text-sm text-litflix-darkGreen/70">{item.rating}/5</span>
+            <span className="text-sm text-litflix-darkGreen/70">{Math.round(item.rating * 2)}/10</span>
             
             <div className="mx-3 h-4 border-r border-litflix-darkGreen/20"></div>
             

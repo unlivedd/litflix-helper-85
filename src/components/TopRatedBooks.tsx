@@ -32,7 +32,7 @@ const TopRatedBooks = () => {
               <h3 className="font-serif font-medium text-lg text-litflix-darkGreen">{book.title}</h3>
               <div className="flex flex-wrap items-center justify-between">
                 <p className="text-sm text-litflix-darkGreen/70 italic">{book.author}</p>
-                <BookRating rating={book.rating || 0} size="sm" useImages={true} showValue />
+                <BookRating rating={Math.round(book.rating || 0)} size="sm" useImages={true} showValue />
               </div>
             </div>
           </div>

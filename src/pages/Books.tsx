@@ -10,10 +10,16 @@ import { Book, searchBooks, getAllBooks } from '@/lib/bookService';
 
 const Books = () => {
   const navigate = useNavigate();
-  const [books, setBooks] = useState<Book[]>(getAllBooks());
+  const [booksData, setBooks] = useState<Book[]>(getAllBooks());
   const [selectedBooks, setSelectedBooks] = useState<number[]>([]);
   const [showSearch, setShowSearch] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  
+  // Округляем рейтинги для корректного отображения
+  const books = booksData.map(book => ({
+    ...book,
+    rating: book.rating ? Math.round(book.rating) : undefined
+  }));
   
   // Animation decorations
   const circlePositions = [
