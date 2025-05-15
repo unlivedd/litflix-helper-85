@@ -16,7 +16,15 @@ const Slider = React.forwardRef<
   // From orange (low rating) to green (high rating)
   const getGradientBackground = () => {
     const percentage = ((rating - (props.min || 0)) / ((props.max || 10) - (props.min || 0))) * 100;
-    return `linear-gradient(to right, #f97316 0%, #f97316 ${percentage/3}%, #fbbf24 ${percentage/3}%, #fbbf24 ${percentage/2}%, #84cc16 ${percentage}%, #d1d5db ${percentage}%, #d1d5db 100%)`;
+    return `linear-gradient(to right, 
+      #f97316 0%, 
+      #f97316 ${percentage/5}%, 
+      #fbbf24 ${percentage/4}%, 
+      #fbbf24 ${percentage/2}%, 
+      #84cc16 ${percentage*0.8}%, 
+      #84cc16 ${percentage}%, 
+      #d1d5db ${percentage}%, 
+      #d1d5db 100%)`;
   };
   
   return (

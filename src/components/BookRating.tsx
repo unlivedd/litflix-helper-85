@@ -45,22 +45,25 @@ const BookRating: React.FC<BookRatingProps> = ({
   const getRatingImageId = (rating: number) => {
     switch (rating) {
       case 1:
+        return "ec4de521-5544-472d-973b-d6ec4e85abc0"; // Изображение для рейтинга 1
       case 2:
+        return "39f72b27-0c19-4da6-bdd9-fb226f35d76d"; // Изображение для рейтинга 2
       case 3:
+        return "dd4f5308-4d1e-4ec1-a29d-c90913eeebe1"; // Изображение для рейтинга 3
       case 4:
+        return "ff1e5352-5f90-4725-bd76-f900ee33d4ed"; // Изображение для рейтинга 4
       case 5:
-        // Для 1-5 используем предыдущие изображения (если они были)
-        return "ec4de521-5544-472d-973b-d6ec4e85abc0"; // Заменить на нужный ID для 1-5
+        return "2d79c713-e142-4111-834f-1b7d4de0ba52"; // Изображение для рейтинга 5
       case 6:
-        return "ec4de521-5544-472d-973b-d6ec4e85abc0";
+        return "ec4de521-5544-472d-973b-d6ec4e85abc0"; // Изображение для рейтинга 6
       case 7:
-        return "992a74b1-a1f6-401a-9bd1-201ea844e191";
+        return "992a74b1-a1f6-401a-9bd1-201ea844e191"; // Изображение для рейтинга 7
       case 8:
-        return "8c3b4cb9-63de-46d9-923f-7f103708ac9d";
+        return "8c3b4cb9-63de-46d9-923f-7f103708ac9d"; // Изображение для рейтинга 8
       case 9:
-        return "b11028ef-50be-44c1-a5a3-37fa70703d4f";
+        return "b11028ef-50be-44c1-a5a3-37fa70703d4f"; // Изображение для рейтинга 9
       case 10:
-        return "f917757b-9e17-4b91-b2b8-5a5cdb48688c";
+        return "f917757b-9e17-4b91-b2b8-5a5cdb48688c"; // Изображение для рейтинга 10
       default:
         return "ec4de521-5544-472d-973b-d6ec4e85abc0"; // Значение по умолчанию
     }
