@@ -29,7 +29,7 @@ const TopRatedBooks = () => {
               <p className="text-sm text-litflix-darkGreen/70 italic">{book.author}</p>
             </div>
             
-            <div className="w-1/3 shrink-0">
+            <div className="w-1/3 h-10 shrink-0 flex items-center">
               <BookRating rating={book.rating || 0} size="sm" useImages={true} />
             </div>
           </div>

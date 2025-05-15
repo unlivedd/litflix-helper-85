@@ -74,9 +74,9 @@ const BookCard: React.FC<BookCardProps> = ({
         </div>
       </div>
       <div className="relative">
-        <div className="book-spine h-12 bg-transparent rounded-b-2xl">
+        <div className="book-spine h-10 bg-litflix-paleYellow/80 rounded-b-2xl overflow-hidden">
           {rating !== undefined && (
-            <div className="w-full h-full">
+            <div className="w-full h-full flex items-center justify-center">
               <BookRating rating={rating} useImages={true} size="sm" />
             </div>
           )}

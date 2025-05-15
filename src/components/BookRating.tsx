@@ -32,7 +32,7 @@ const BookRating: React.FC<BookRatingProps> = ({
   
   const starSize = starSizes[size];
 
-  // Новый функционал для получения пути к изображению рейтинга на основе значения
+  // Функционал для получения пути к изображению рейтинга на основе значения
   const getRatingImagePath = (rating: number) => {
     // Округляем рейтинг до ближайшего целого
     const roundedRating = Math.round(rating);
@@ -45,7 +45,7 @@ const BookRating: React.FC<BookRatingProps> = ({
     return getRatingImageById(roundedRating);
   };
 
-  // Новые ID изображений для разных значений рейтинга
+  // ID изображений для разных значений рейтинга
   const getRatingImageById = (rating: number) => {
     switch (rating) {
       case 1:
@@ -104,17 +104,20 @@ const BookRating: React.FC<BookRatingProps> = ({
   if (useImages) {
     return (
       <div className="w-full">
-        <img 
-          src={getRatingImagePath(safeRating)} 
-          alt={`Рейтинг ${Math.round(safeRating)} из 10`}
-          className="w-full h-auto object-contain"
-          onError={(e) => {
-            console.error("Error loading image:", e);
-            const target = e.target as HTMLImageElement;
-            target.onerror = null;
-            target.alt = `Рейтинг ${Math.round(safeRating)} из 10`;
-          }}
-        />
+        <div className="w-full h-full overflow-hidden flex items-center justify-center">
+          <img 
+            src={getRatingImagePath(safeRating)} 
+            alt={`Рейтинг ${Math.round(safeRating)} из 10`}
+            className="w-full object-contain"
+            style={{ objectPosition: '50% 50%', objectFit: 'cover' }}
+            onError={(e) => {
+              console.error("Error loading image:", e);
+              const target = e.target as HTMLImageElement;
+              target.onerror = null;
+              target.alt = `Рейтинг ${Math.round(safeRating)} из 10`;
+            }}
+          />
+        </div>
         
         {interactive && (
           <Slider
@@ -126,6 +129,14 @@ const BookRating: React.FC<BookRatingProps> = ({
             disabled={disabled}
             className="w-full mt-2"
           />
+        )}
+        
+        {showValue && (
+          <div className="text-center mt-1">
+            <span className="text-litflix-darkGreen font-medium">
+              {Math.round(safeRating)}/10
+            </span>
+          </div>
         )}
       </div>
     );
@@ -153,6 +164,12 @@ const BookRating: React.FC<BookRatingProps> = ({
           </button>
         ))}
       </div>
+      
+      {showValue && (
+        <span className="ml-2 text-litflix-darkGreen font-medium">
+          {Math.round(safeRating)}/10
+        </span>
+      )}
     </div>
   );
 };
