@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
-import { getAllFavorites, toggleFavorite, FavoriteItem } from '@/lib/favoritesService';
+import { getFavorites, toggleFavorite, FavoriteItem } from '@/lib/favoritesService';
 import { Heart, Trash2, Book, Film } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -13,7 +13,7 @@ const Favorites = () => {
   
   useEffect(() => {
     const loadFavorites = () => {
-      const favoritesData = getAllFavorites();
+      const favoritesData = getFavorites();
       setFavorites(favoritesData);
     };
     

@@ -1,8 +1,9 @@
 
-type FavoriteItem = {
+export type FavoriteItem = {
   id: number;
   type: 'book' | 'movie';
   title: string;
+  subtitle?: string; // Adding an optional subtitle field
 };
 
 export const isInFavorites = (id: number, type: 'book' | 'movie'): boolean => {

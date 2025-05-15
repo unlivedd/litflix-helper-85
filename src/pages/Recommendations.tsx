@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
 import { Heart, Star, ChevronDown, ChevronUp, Share2, BookOpen, Film } from 'lucide-react';
 import { toast } from 'sonner';
-import { isInFavorites, toggleFavorite } from '@/lib/favoritesService';
+import { isInFavorites, toggleFavorite, FavoriteItem } from '@/lib/favoritesService';
 
 const mockMovies = [
   { 
@@ -192,12 +191,14 @@ const Recommendations = () => {
   const handleToggleFavorite = (item: any) => {
     const itemType = recommendationType === 'books' ? 'book' : 'movie';
     
-    const newStatus = toggleFavorite({
+    const favoriteItem: FavoriteItem = {
       id: item.id,
       type: itemType,
       title: item.title,
       subtitle: recommendationType === 'books' ? item.author : item.director
-    });
+    };
+    
+    const newStatus = toggleFavorite(favoriteItem);
     
     setFavorites(prev => ({
       ...prev,
