@@ -91,18 +91,21 @@ const BookRating: React.FC<BookRatingProps> = ({
     }
   };
 
+  // Проверяем, является ли тип входного рейтинга числом
+  const numericRating = typeof rating === 'number' ? rating : 0;
+
   if (useImages) {
     return (
       <div className="flex flex-col items-center gap-2">
         <img 
-          src={getRatingImagePath(rating)} 
-          alt={`Рейтинг ${rating} из 10`} 
+          src={getRatingImagePath(numericRating)} 
+          alt={`Рейтинг ${numericRating} из 10`} 
           className="h-8 w-full object-contain"
         />
         
         {interactive && (
           <Slider
-            value={[rating]}
+            value={[numericRating]}
             min={1}
             max={10}
             step={1}
@@ -114,7 +117,7 @@ const BookRating: React.FC<BookRatingProps> = ({
         
         {showValue && (
           <span className="text-litflix-darkGreen font-medium text-center">
-            {Math.round(rating)}/10
+            {Math.round(numericRating)}/10
           </span>
         )}
       </div>
@@ -135,8 +138,8 @@ const BookRating: React.FC<BookRatingProps> = ({
             aria-label={`Rate ${index + 1} out of ${maxStars}`}
           >
             <Star
-              fill={getStarColor(index, rating)}
-              color={getStarColor(index, rating)}
+              fill={getStarColor(index, numericRating)}
+              color={getStarColor(index, numericRating)}
               size={starSize}
               className="transition-all duration-200"
             />
@@ -146,7 +149,7 @@ const BookRating: React.FC<BookRatingProps> = ({
       
       {showValue && (
         <span className="ml-2 text-litflix-darkGreen font-medium">
-          {Math.round(rating)}/10
+          {Math.round(numericRating)}/10
         </span>
       )}
     </div>
