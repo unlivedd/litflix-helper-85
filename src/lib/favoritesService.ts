@@ -1,75 +1,91 @@
 
-export interface FavoriteItem {
+type FavoriteItem = {
   id: number;
   type: 'book' | 'movie';
   title: string;
-  subtitle?: string; // author for books, director for movies
-}
+};
 
-// Check if an item is in favorites
 export const isInFavorites = (id: number, type: 'book' | 'movie'): boolean => {
   try {
-    const favoritesStr = localStorage.getItem('favorites');
-    if (!favoritesStr) return false;
+    // Проверяем, авторизован ли пользователь
+    const currentUser = localStorage.getItem('currentUser');
+    if (!currentUser) return false;
     
-    const favorites: FavoriteItem[] = JSON.parse(favoritesStr);
-    return favorites.some(item => item.id === id && item.type === type);
+    const userData = JSON.parse(currentUser);
+    
+    // Получаем избранное пользователя
+    const favorites = userData.favorites || [];
+    
+    // Проверяем наличие элемента в избранном
+    return favorites.some((item: FavoriteItem) => item.id === id && item.type === type);
   } catch (error) {
     console.error('Error checking favorites:', error);
     return false;
   }
 };
 
-// Toggle an item in favorites
 export const toggleFavorite = (item: FavoriteItem): boolean => {
   try {
-    const favoritesStr = localStorage.getItem('favorites');
-    let favorites: FavoriteItem[] = favoritesStr ? JSON.parse(favoritesStr) : [];
+    // Проверяем, авторизован ли пользователь
+    const currentUserString = localStorage.getItem('currentUser');
+    if (!currentUserString) return false;
     
-    const existingIndex = favorites.findIndex(
-      favItem => favItem.id === item.id && favItem.type === item.type
+    const currentUser = JSON.parse(currentUserString);
+    
+    // Инициализируем массив избранного, если его нет
+    if (!currentUser.favorites) {
+      currentUser.favorites = [];
+    }
+    
+    // Проверяем, есть ли уже такой элемент в избранном
+    const existingIndex = currentUser.favorites.findIndex(
+      (fav: FavoriteItem) => fav.id === item.id && fav.type === item.type
     );
     
-    if (existingIndex >= 0) {
-      // Remove from favorites
-      favorites.splice(existingIndex, 1);
-      localStorage.setItem('favorites', JSON.stringify(favorites));
+    // Если элемент уже в избранном - удаляем его
+    if (existingIndex !== -1) {
+      currentUser.favorites.splice(existingIndex, 1);
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      
+      // Обновляем также в общем списке пользователей
+      updateUserInStorage(currentUser);
       return false;
-    } else {
-      // Add to favorites
-      favorites.push(item);
-      localStorage.setItem('favorites', JSON.stringify(favorites));
-      return true;
     }
+    
+    // Если элемента нет - добавляем его
+    currentUser.favorites.push(item);
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    
+    // Обновляем также в общем списке пользователей
+    updateUserInStorage(currentUser);
+    return true;
   } catch (error) {
     console.error('Error toggling favorite:', error);
     return false;
   }
 };
 
-// Get all favorites
-export const getAllFavorites = (): FavoriteItem[] => {
+export const getFavorites = (): FavoriteItem[] => {
   try {
-    const favoritesStr = localStorage.getItem('favorites');
-    return favoritesStr ? JSON.parse(favoritesStr) : [];
+    // Проверяем, авторизован ли пользователь
+    const currentUser = localStorage.getItem('currentUser');
+    if (!currentUser) return [];
+    
+    const userData = JSON.parse(currentUser);
+    return userData.favorites || [];
   } catch (error) {
-    console.error('Error getting all favorites:', error);
+    console.error('Error getting favorites:', error);
     return [];
   }
 };
 
-// Get favorites by type
-export const getFavoritesByType = (type: 'book' | 'movie'): FavoriteItem[] => {
-  try {
-    const all = getAllFavorites();
-    return all.filter(item => item.type === type);
-  } catch (error) {
-    console.error(`Error getting ${type} favorites:`, error);
-    return [];
+// Вспомогательная функция для обновления пользователя в общем хранилище
+const updateUserInStorage = (currentUser: any) => {
+  const users = JSON.parse(localStorage.getItem('users') || '[]');
+  const userIndex = users.findIndex((u: any) => u.id === currentUser.id);
+  
+  if (userIndex !== -1) {
+    users[userIndex] = currentUser;
+    localStorage.setItem('users', JSON.stringify(users));
   }
-};
-
-// Clear all favorites
-export const clearFavorites = (): void => {
-  localStorage.removeItem('favorites');
 };

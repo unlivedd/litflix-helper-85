@@ -4,23 +4,40 @@ import { useParams, useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
 import { getBookById } from '@/lib/bookService';
-import { Star, Heart, Share2 } from 'lucide-react';
+import { Heart, Share2 } from 'lucide-react';
 import { isInFavorites, toggleFavorite } from '@/lib/favoritesService';
 import { toast } from 'sonner';
+import BookRating from '@/components/BookRating';
 
 const BookDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const book = getBookById(Number(id));
   const [isFavorite, setIsFavorite] = useState(false);
+  const [userRating, setUserRating] = useState(0);
+  
+  // Проверяем, авторизован ли пользователь
+  const isLoggedIn = !!localStorage.getItem('currentUser');
 
   useEffect(() => {
     if (book) {
       setIsFavorite(isInFavorites(book.id, 'book'));
+      
+      // Загружаем рейтинг пользователя если он авторизован
+      if (isLoggedIn) {
+        const userRatings = JSON.parse(localStorage.getItem('userRatings') || '{}');
+        setUserRating(userRatings[book.id] || 0);
+      }
     }
-  }, [book]);
+  }, [book, isLoggedIn]);
 
   const handleToggleFavorite = () => {
+    if (!isLoggedIn) {
+      toast.error('Необходимо войти в систему для добавления в избранное');
+      navigate('/login');
+      return;
+    }
+    
     if (book) {
       const newStatus = toggleFavorite({
         id: book.id,
@@ -30,6 +47,23 @@ const BookDetail = () => {
       setIsFavorite(newStatus);
       toast.success(newStatus ? 'Добавлено в избранное' : 'Удалено из избранного');
     }
+  };
+  
+  const handleRateBook = (rating: number) => {
+    if (!isLoggedIn) {
+      toast.error('Необходимо войти в систему, чтобы оценивать книги');
+      navigate('/login');
+      return;
+    }
+    
+    setUserRating(rating);
+    
+    // Сохраняем рейтинг в localStorage
+    const userRatings = JSON.parse(localStorage.getItem('userRatings') || '{}');
+    userRatings[book.id] = rating;
+    localStorage.setItem('userRatings', JSON.stringify(userRatings));
+    
+    toast.success(`Вы оценили книгу на ${rating} из 10`);
   };
 
   const handleShare = () => {
@@ -85,16 +119,7 @@ const BookDetail = () => {
             <div className="p-8 md:w-2/3">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
-                  <div className="flex">
-                    {Array(5).fill(0).map((_, i) => (
-                      <Star 
-                        key={i} 
-                        className={i < Math.floor(book.rating || 0) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"} 
-                        size={20} 
-                      />
-                    ))}
-                  </div>
-                  <span className="ml-2 text-litflix-darkGreen/80">{book.rating}/5</span>
+                  <BookRating rating={book.rating || 0} size="md" showValue />
                 </div>
                 
                 <div className="text-litflix-darkGreen/70 text-sm">
@@ -123,25 +148,49 @@ const BookDetail = () => {
                 </ul>
               </div>
               
-              <div className="flex space-x-4 mt-8">
-                <button 
-                  className={`flex items-center gap-2 px-6 py-2 rounded-full transition-colors ${
-                    isFavorite 
-                      ? "bg-litflix-darkGreen text-white" 
-                      : "border border-litflix-mediumGreen text-litflix-mediumGreen hover:bg-litflix-mediumGreen/10"
-                  }`}
-                  onClick={handleToggleFavorite}
-                >
-                  <Heart size={18} fill={isFavorite ? "white" : "none"} />
-                  {isFavorite ? 'В избранном' : 'Добавить в избранное'}
-                </button>
-                <button 
-                  className="border border-litflix-mediumGreen text-litflix-mediumGreen px-6 py-2 rounded-full hover:bg-litflix-mediumGreen/10 transition-colors flex items-center gap-2"
-                  onClick={handleShare}
-                >
-                  <Share2 size={18} />
-                  Поделиться
-                </button>
+              <div className="flex flex-col gap-4 mt-8">
+                <div className="bg-litflix-paleYellow/40 p-4 rounded-xl">
+                  <h4 className="text-litflix-darkGreen font-medium mb-2">Оцените эту книгу:</h4>
+                  <BookRating 
+                    rating={userRating}
+                    size="lg"
+                    showValue={true}
+                    onRate={handleRateBook}
+                    disabled={!isLoggedIn}
+                  />
+                  {!isLoggedIn && (
+                    <p className="text-sm text-litflix-darkGreen/70 mt-2">
+                      <button 
+                        onClick={() => navigate('/login')}
+                        className="text-litflix-darkGreen underline"
+                      >
+                        Войдите
+                      </button>, чтобы оценить книгу
+                    </p>
+                  )}
+                </div>
+                
+                <div className="flex flex-wrap gap-3">
+                  <button 
+                    className={`flex items-center gap-2 px-6 py-2 rounded-full transition-colors ${
+                      isFavorite 
+                        ? "bg-litflix-darkGreen text-white" 
+                        : "border border-litflix-mediumGreen text-litflix-mediumGreen hover:bg-litflix-mediumGreen/10"
+                    }`}
+                    onClick={handleToggleFavorite}
+                  >
+                    <Heart size={18} fill={isFavorite ? "white" : "none"} />
+                    {isFavorite ? 'В избранном' : 'Добавить в избранное'}
+                  </button>
+                  
+                  <button 
+                    className="border border-litflix-mediumGreen text-litflix-mediumGreen px-6 py-2 rounded-full hover:bg-litflix-mediumGreen/10 transition-colors flex items-center gap-2"
+                    onClick={handleShare}
+                  >
+                    <Share2 size={18} />
+                    Поделиться
+                  </button>
+                </div>
               </div>
             </div>
           </div>

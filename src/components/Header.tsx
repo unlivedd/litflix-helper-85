@@ -1,71 +1,68 @@
 
-import React from 'react';
-import { Search, Camera, Heart } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Search } from 'lucide-react';
+import UserMenu from '@/components/UserMenu';
 
 interface HeaderProps {
   onSearchClick?: () => void;
-  className?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ 
-  onSearchClick,
-  className 
-}) => {
+const Header: React.FC<HeaderProps> = ({ onSearchClick }) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const isRecommendationsPage = location.pathname === '/recommendations';
-
-  const handleSearchClick = () => {
-    if (onSearchClick) {
-      onSearchClick();
-    } else {
-      // If no custom search handler is provided, navigate to books page
-      navigate('/books');
-    }
-  };
+  const [scrolled, setScrolled] = useState(false);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className={cn("w-full py-4 px-6 flex justify-between items-center", className)}>
-      <h1 className="text-3xl font-serif font-bold text-litflix-darkGreen tracking-tighter">
-        <span className="text-litflix-mediumGreen">B</span>
-        <span className="relative">
-          <span className="absolute text-xs top-1 left-1">R.</span>
-          O
-        </span>
-        <span className="relative">
-          <span className="absolute text-xs bottom-1 left-1">d.</span>
-          O
-        </span>
-        <span className="text-litflix-mediumGreen">K</span>
-        <span className="text-litflix-darkGreen">S</span>
-      </h1>
-      
-      {!isRecommendationsPage && (
-        <div className="flex items-center space-x-4">
-          <button 
-            onClick={handleSearchClick}
-            className="rounded-full bg-litflix-mediumGreen/20 p-2 text-litflix-darkGreen hover:bg-litflix-mediumGreen/30 transition-colors"
-            aria-label="Search"
-          >
-            <Search size={20} />
-          </button>
-          <button 
-            onClick={() => navigate('/favorites')}
-            className="rounded-full bg-litflix-mediumGreen/20 p-2 text-litflix-darkGreen hover:bg-litflix-mediumGreen/30 transition-colors"
-            aria-label="Favorites"
-          >
-            <Heart size={20} />
-          </button>
-          <button 
-            className="rounded-full bg-litflix-mediumGreen/20 p-2 text-litflix-darkGreen hover:bg-litflix-mediumGreen/30 transition-colors"
-            aria-label="Video recommendations"
-          >
-            <Camera size={20} />
-          </button>
+    <header 
+      className={`sticky top-0 z-20 transition-all duration-300 ${
+        scrolled 
+        ? 'bg-litflix-cream/80 backdrop-blur-md py-2 shadow-sm' 
+        : 'bg-transparent py-4'
+      }`}
+    >
+      <div className="container mx-auto px-4 flex items-center justify-between">
+        <div 
+          className="font-serif text-xl font-bold text-litflix-darkGreen cursor-pointer"
+          onClick={() => navigate('/')}
+        >
+          <span className="relative">
+            B
+          </span>
+          <span className="relative">
+            <span className="absolute text-xs top-0 right-0 font-sans">R.</span>
+            O
+          </span>
+          <span className="relative">
+            <span className="absolute text-xs bottom-0 right-0 font-sans">d.</span>
+            O
+          </span>
+          <span>K</span>
+          <span>S</span>
         </div>
-      )}
+        
+        <div className="flex items-center space-x-4">
+          {onSearchClick && (
+            <button
+              onClick={onSearchClick}
+              className="p-2 rounded-full hover:bg-litflix-paleYellow/60 text-litflix-darkGreen/80 transition-colors"
+              aria-label="Search"
+            >
+              <Search size={18} />
+            </button>
+          )}
+          
+          <UserMenu />
+        </div>
+      </div>
     </header>
   );
 };

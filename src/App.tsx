@@ -8,11 +8,11 @@ import Index from "./pages/Index";
 import Books from "./pages/Books";
 import Movies from "./pages/Movies";
 import BookDetail from "./pages/BookDetail";
-import Questionnaire from "./pages/Questionnaire";
-import RecommendationSelector from "./pages/RecommendationSelector";
 import Recommendations from "./pages/Recommendations";
 import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 const queryClient = new QueryClient();
 
@@ -27,10 +27,10 @@ const App = () => (
           <Route path="/books" element={<Books />} />
           <Route path="/movies" element={<Movies />} />
           <Route path="/book/:id" element={<BookDetail />} />
-          <Route path="/recommendation-selector" element={<RecommendationSelector />} />
-          <Route path="/questionnaire" element={<Questionnaire />} />
           <Route path="/recommendations" element={<Recommendations />} />
           <Route path="/favorites" element={<Favorites />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
