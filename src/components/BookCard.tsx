@@ -3,6 +3,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 import { Info, Heart } from 'lucide-react';
+import BookRating from './BookRating';
 
 interface BookCardProps {
   title: string;
@@ -11,6 +12,7 @@ interface BookCardProps {
   selected?: boolean;
   className?: string;
   id?: number;
+  rating?: number;
 }
 
 const BookCard: React.FC<BookCardProps> = ({
@@ -19,7 +21,8 @@ const BookCard: React.FC<BookCardProps> = ({
   onClick,
   selected = false,
   className,
-  id
+  id,
+  rating
 }) => {
   const navigate = useNavigate();
   
@@ -72,7 +75,14 @@ const BookCard: React.FC<BookCardProps> = ({
       </div>
       <div className="relative">
         <div className="book-spine h-12 bg-litflix-darkGreen rounded-b-2xl flex items-center justify-center">
-          <div className="w-4/5 h-4 bg-white rounded-full mx-auto opacity-80"></div>
+          {rating !== undefined && (
+            <div className="mx-auto w-4/5 -mt-1">
+              <BookRating rating={rating} useImages={true} size="sm" />
+            </div>
+          )}
+          {rating === undefined && (
+            <div className="w-4/5 h-4 bg-white rounded-full mx-auto opacity-80"></div>
+          )}
         </div>
         <div className="absolute -top-1.5 left-0 right-0 w-4/5 h-1 bg-white/90 rounded-full mx-auto"></div>
       </div>

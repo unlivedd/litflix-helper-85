@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
@@ -114,6 +114,7 @@ const Books = () => {
               id={book.id}
               title={book.title}
               author={book.author}
+              rating={book.rating}
               selected={selectedBooks.includes(book.id)}
               onClick={() => toggleBookSelection(book.id)}
             />

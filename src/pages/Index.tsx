@@ -123,6 +123,7 @@ const Index = () => {
               id={book.id}
               title={book.title}
               author={book.author}
+              rating={book.rating}
               onClick={() => handleBookClick(book.id)}
             />
           ))}
