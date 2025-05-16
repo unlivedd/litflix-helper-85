@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Label } from '@/components/ui/label';
@@ -7,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import BackButton from '@/components/BackButton';
 import { toast } from 'sonner';
 import { useForm } from "react-hook-form";
+import { loginUser } from '@/lib/authService';
 
 type LoginForm = {
   email: string;
@@ -22,17 +22,11 @@ const Login = () => {
   const onSubmit = async (data: LoginForm) => {
     setIsLoading(true);
     try {
-      // Эмулируем проверку пользователя
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const user = users.find((u: any) => u.email === data.email && u.password === data.password);
+      const success = await loginUser(data.email, data.password);
       
-      if (user) {
-        // Сохраняем информацию о пользователе
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        toast.success('Успешный вход в систему');
+      if (success) {
+        toast.success('Вход выполнен успешно!');
         navigate('/');
-      } else {
-        toast.error('Неправильный email или пароль');
       }
     } catch (error) {
       toast.error('Произошла ошибка при входе');
@@ -92,7 +86,7 @@ const Login = () => {
                   required: "Пароль обязателен",
                   minLength: {
                     value: 6,
-                    message: "Пароль должен содержать не менее 6 символов"
+                    message: "Пароль должен содержать не менее 6 ��имволов"
                   } 
                 })}
               />

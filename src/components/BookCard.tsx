@@ -4,6 +4,8 @@ import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 import { Info, Heart } from 'lucide-react';
 import BookRating from './BookRating';
+import { toggleFavorite, isInFavorites, FavoriteItem } from '@/lib/favoritesService';
+import { toast } from 'sonner';
 
 interface BookCardProps {
   title: string;
@@ -26,11 +28,33 @@ const BookCard: React.FC<BookCardProps> = ({
 }) => {
   const navigate = useNavigate();
   
+  const isFavorite = id ? isInFavorites(id, 'book') : false;
+  
   const handleInfoClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (id) {
       navigate(`/book/${id}`);
     }
+  };
+  
+  const handleFavoriteToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (!id) return;
+    
+    const favoriteItem: FavoriteItem = {
+      id,
+      type: 'book',
+      title,
+      subtitle: author
+    };
+    
+    const isNowFavorite = toggleFavorite(favoriteItem);
+    
+    toast.success(isNowFavorite 
+      ? `"${title}" добавлено в избранное` 
+      : `"${title}" удалено из избранного`
+    );
   };
 
   return (
@@ -44,20 +68,17 @@ const BookCard: React.FC<BookCardProps> = ({
       onClick={onClick}
     >
       <div className="book-cover flex-grow flex items-center justify-center p-5 bg-litflix-paleYellow rounded-t-2xl relative">
-        {/* Heart icon for selection state */}
+        {/* Heart icon for favorites */}
         <button
           className={cn(
             "absolute top-2 left-2 p-1.5 rounded-full transition-all duration-300",
-            selected 
+            isFavorite 
               ? "text-white bg-litflix-darkGreen" 
               : "text-litflix-darkGreen/70 bg-white/50 hover:bg-white/80"
           )}
-          onClick={(e) => {
-            e.stopPropagation();
-            onClick?.();
-          }}
+          onClick={handleFavoriteToggle}
         >
-          <Heart size={16} fill={selected ? "white" : "none"} />
+          <Heart size={16} fill={isFavorite ? "white" : "none"} />
         </button>
 
         {id && (
@@ -78,7 +99,7 @@ const BookCard: React.FC<BookCardProps> = ({
         <div className="book-spine h-10 bg-litflix-paleYellow/80 rounded-b-2xl overflow-hidden">
           {rating !== undefined && (
             <div className="w-full h-full flex items-center justify-center">
-              <BookRating rating={rating} useImages={true} size="sm" />
+              <BookRating rating={rating} useImages={false} size="sm" />
             </div>
           )}
         </div>

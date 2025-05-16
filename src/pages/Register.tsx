@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Label } from '@/components/ui/label';
@@ -7,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import BackButton from '@/components/BackButton';
 import { toast } from 'sonner';
 import { useForm } from "react-hook-form";
+import { registerUser } from '@/lib/authService';
 
 type RegisterForm = {
   name: string;
@@ -24,31 +24,16 @@ const Register = () => {
   const onSubmit = async (data: RegisterForm) => {
     setIsLoading(true);
     try {
-      // Проверяем, существует ли уже пользователь с таким email
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      if (users.some((u: any) => u.email === data.email)) {
-        toast.error('Пользователь с таким email уже существует');
-        setIsLoading(false);
-        return;
-      }
-      
-      // Добавляем нового пользователя
-      const newUser = {
-        id: Date.now(),
+      const success = await registerUser({
         name: data.name,
         email: data.email,
-        password: data.password,
-        favorites: []
-      };
+        password: data.password
+      });
       
-      users.push(newUser);
-      localStorage.setItem('users', JSON.stringify(users));
-      
-      // Входим автоматически после регистрации
-      localStorage.setItem('currentUser', JSON.stringify(newUser));
-      
-      toast.success('Регистрация успешна!');
-      navigate('/');
+      if (success) {
+        toast.success('Регистрация успешна!');
+        navigate('/');
+      }
     } catch (error) {
       toast.error('Произошла ошибка при регистрации');
     } finally {
