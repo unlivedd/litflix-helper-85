@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -185,16 +186,6 @@ const Recommendations = () => {
                     <p className="italic">{item.author}</p>
                     <p>{item.genre}</p>
                   </div>
-                  
-                  <div className="mt-3">
-                    <Slider 
-                      defaultValue={[item.rating]} 
-                      max={10} 
-                      step={0.1} 
-                      disabled={true}
-                      className="cursor-default" 
-                    />
-                  </div>
                 </div>
               ) : (
                 // Movie card
@@ -224,16 +215,6 @@ const Recommendations = () => {
                     <p>Режиссер: {item.director}</p>
                     <p>Год: {item.year}</p>
                     <p>Жанр: {item.genre}</p>
-                  </div>
-                  
-                  <div className="mt-3">
-                    <Slider 
-                      defaultValue={[item.rating]} 
-                      max={10} 
-                      step={0.1} 
-                      disabled={true} 
-                      className="cursor-default"
-                    />
                   </div>
                 </div>
               )}

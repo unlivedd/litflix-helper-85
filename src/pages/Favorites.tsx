@@ -28,19 +28,17 @@ const Favorites = () => {
   }, []);
   
   const handleRemoveFavorite = (id: number, type: 'book' | 'movie') => {
-    // Create a favorite item to toggle (remove)
-    const itemToRemove: FavoriteItem = {
-      id,
-      type,
-      title: favorites.find(item => item.id === id && item.type === type)?.title || ''
-    };
+    // Find the favorite item to get its full details
+    const itemToRemove = favorites.find(item => item.id === id && item.type === type);
     
-    // Use toggleFavorite to remove the item
-    toggleFavorite(itemToRemove);
-    
-    // Update state
-    setFavorites(prev => prev.filter(item => !(item.id === id && item.type === type)));
-    toast.success('Удалено из избранного');
+    if (itemToRemove) {
+      // Use toggleFavorite to remove the item
+      toggleFavorite(itemToRemove);
+      
+      // Update state
+      setFavorites(prev => prev.filter(item => !(item.id === id && item.type === type)));
+      toast.success('Удалено из избранного');
+    }
   };
   
   const handleNavigateToItem = (id: number, type: 'book' | 'movie') => {

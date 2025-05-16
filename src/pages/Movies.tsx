@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -211,16 +212,6 @@ const Movies = () => {
                   <p>Режиссер: {movie.director}</p>
                   <p>Год: {movie.year}</p>
                   <p>Жанр: {movie.genre}</p>
-                </div>
-                
-                <div className="mt-3">
-                  <Slider 
-                    defaultValue={[movie.rating]} 
-                    max={10} 
-                    step={0.1} 
-                    disabled={true} 
-                    className="cursor-default"
-                  />
                 </div>
               </CardContent>
             </Card>
