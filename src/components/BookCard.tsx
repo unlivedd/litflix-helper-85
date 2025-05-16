@@ -37,7 +37,7 @@ const BookCard: React.FC<BookCardProps> = ({
     <div 
       className={cn(
         "book-card hover-lift cursor-pointer flex flex-col shadow-md",
-        "h-52 rounded-2xl overflow-hidden transition-all duration-300",
+        "h-52 rounded-2xl overflow-hidden transition-all duration-300 relative",
         selected && "ring-2 ring-litflix-darkGreen transform scale-[1.02]",
         className
       )}
@@ -73,15 +73,13 @@ const BookCard: React.FC<BookCardProps> = ({
           <p className="text-sm text-litflix-darkGreen/70 mt-2 italic">{author}</p>
         </div>
       </div>
-      <div className="relative">
-        <div className="book-spine h-10 bg-litflix-paleYellow/80 rounded-b-2xl overflow-hidden">
-          {rating !== undefined && (
-            <div className="w-full h-full flex items-center justify-center">
-              <BookRating rating={rating} useImages={true} size="sm" />
-            </div>
-          )}
+      
+      {/* Rating overlay at the bottom */}
+      {rating !== undefined && (
+        <div className="absolute bottom-0 w-full h-10 z-10">
+          <BookRating rating={rating} useImages={true} size="sm" />
         </div>
-      </div>
+      )}
     </div>
   );
 };
