@@ -18,7 +18,7 @@ const TopRatedBooks = () => {
           <div 
             key={book.id}
             onClick={() => navigate(`/book/${book.id}`)}
-            className="flex items-center bg-white/80 backdrop-blur-sm rounded-xl p-3 mb-3 cursor-pointer hover:shadow-md transition-shadow relative"
+            className="flex items-center bg-white/80 backdrop-blur-sm rounded-xl p-3 mb-3 cursor-pointer hover:shadow-md transition-shadow"
           >
             <div className="w-10 h-10 flex items-center justify-center font-bold text-lg text-litflix-darkGreen rounded-full bg-litflix-paleYellow mr-4 shrink-0">
               {index + 1}

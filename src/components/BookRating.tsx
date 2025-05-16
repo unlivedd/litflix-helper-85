@@ -103,13 +103,13 @@ const BookRating: React.FC<BookRatingProps> = ({
 
   if (useImages) {
     return (
-      <div className="w-full h-full">
-        <div className="w-full h-full flex items-center justify-center overflow-hidden bg-white/80">
+      <div className="w-full">
+        <div className="w-full h-full overflow-hidden flex items-center justify-center">
           <img 
             src={getRatingImagePath(safeRating)} 
             alt={`Рейтинг ${Math.round(safeRating)} из 10`}
             className="w-full object-contain"
-            style={{ height: 'auto' }}
+            style={{ objectPosition: '50% 50%', objectFit: 'cover' }}
             onError={(e) => {
               console.error("Error loading image:", e);
               const target = e.target as HTMLImageElement;

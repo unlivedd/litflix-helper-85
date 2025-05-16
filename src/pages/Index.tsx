@@ -65,7 +65,7 @@ const Index = () => {
       {/* Background image with overlay */}
       <div className="page-background">
         <img 
-          src="/lovable-uploads/117cd767-a1f6-4f8f-9219-f52549ac689b.png" 
+          src="/lovable-uploads/629995e0-88ac-4574-8b9f-d9877747d25f.png" 
           alt="Cozy living room with books" 
           className="page-background-image opacity-80"
         />
