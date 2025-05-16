@@ -29,6 +29,19 @@ const BookDetail = () => {
         setUserRating(userRatings[book.id] || 0);
       }
     }
+    
+    // Слушаем изменения в избранном
+    const handleFavoritesChanged = (e: any) => {
+      if (book && e.detail?.item?.id === book.id && e.detail?.item?.type === 'book') {
+        setIsFavorite(e.detail.isNowFavorite);
+      }
+    };
+    
+    window.addEventListener('favorites-changed', handleFavoritesChanged as EventListener);
+    
+    return () => {
+      window.removeEventListener('favorites-changed', handleFavoritesChanged as EventListener);
+    };
   }, [book, isLoggedIn]);
 
   const handleToggleFavorite = () => {
@@ -42,10 +55,11 @@ const BookDetail = () => {
       const newStatus = toggleFavorite({
         id: book.id,
         type: 'book',
-        title: book.title
+        title: book.title,
+        subtitle: book.author
       });
+      
       setIsFavorite(newStatus);
-      toast.success(newStatus ? 'Добавлено в избранное' : 'Удалено из избранного');
     }
   };
   

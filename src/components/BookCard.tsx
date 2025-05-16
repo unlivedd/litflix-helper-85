@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { Info, Heart } from 'lucide-react';
 import BookRating from './BookRating';
 import { toggleFavorite, isInFavorites, FavoriteItem } from '@/lib/favoritesService';
-import { toast } from 'sonner';
 
 interface BookCardProps {
   title: string;
@@ -81,11 +80,6 @@ const BookCard: React.FC<BookCardProps> = ({
     
     // Update local state immediately for responsive UI
     setIsFavorite(isNowFavorite);
-    
-    toast.success(isNowFavorite 
-      ? `"${title}" добавлено в избранное` 
-      : `"${title}" удалено из избранного`
-    );
   };
 
   return (

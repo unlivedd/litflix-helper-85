@@ -5,7 +5,6 @@ import BookRating from './BookRating';
 import { getAllBooks } from '@/lib/bookService';
 import { isInFavorites, toggleFavorite, FavoriteItem } from '@/lib/favoritesService';
 import { Heart } from 'lucide-react';
-import { toast } from 'sonner';
 
 const TopRatedBooks = () => {
   const navigate = useNavigate();
@@ -60,11 +59,6 @@ const TopRatedBooks = () => {
       ...prev,
       [book.id]: isNowFavorite
     }));
-    
-    toast.success(isNowFavorite 
-      ? `"${book.title}" добавлено в избранное` 
-      : `"${book.title}" удалено из избранного`
-    );
   };
 
   return (

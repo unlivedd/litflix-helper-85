@@ -20,18 +20,15 @@ const BookRating: React.FC<BookRatingProps> = ({
   disabled = false,
   useImages = false,
 }) => {
-  // Make it a 5-star rating system for display simplicity
-  const maxStars = 5;
+  // Теперь используем 10-звездочную систему
+  const maxStars = 10;
   const interactive = !!onRate && !disabled;
-  
-  // Adjust rating to a 5-star scale
-  const fiveStarRating = rating && rating > 0 ? rating / 2 : 0;
   
   // Определение размеров звезд в зависимости от пропса size
   const starSizes = {
-    sm: 14,
-    md: 18,
-    lg: 24
+    sm: 12,
+    md: 16,
+    lg: 20
   };
   
   const starSize = starSizes[size];
@@ -52,8 +49,7 @@ const BookRating: React.FC<BookRatingProps> = ({
 
   const handleRating = (newRating: number) => {
     if (interactive) {
-      // Convert back to 10-point scale
-      onRate(newRating * 2);
+      onRate(newRating);
     }
   };
 
@@ -68,8 +64,6 @@ const BookRating: React.FC<BookRatingProps> = ({
 
   // Обеспечиваем, что рейтинг всегда находится в диапазоне от 0 до 10
   const safeRating = Math.max(0, Math.min(10, numericRating));
-  // Convert to 5-star scale
-  const safeFiveStarRating = safeRating / 2;
 
   return (
     <div className="flex items-center">
@@ -85,8 +79,8 @@ const BookRating: React.FC<BookRatingProps> = ({
             aria-label={`Rate ${index + 1} out of ${maxStars}`}
           >
             <Star
-              fill={index < safeFiveStarRating ? getStarColor(index, safeFiveStarRating) : "none"}
-              color={getStarColor(index, safeFiveStarRating)}
+              fill={index < safeRating ? getStarColor(index, safeRating) : "none"}
+              color={getStarColor(index, safeRating)}
               size={starSize}
               className="transition-all duration-200"
             />
