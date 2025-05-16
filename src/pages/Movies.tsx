@@ -4,22 +4,23 @@ import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
 import { isInFavorites, toggleFavorite, FavoriteItem } from '@/lib/favoritesService';
-import { Film, Heart } from 'lucide-react';
+import { Film, Heart, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
+import { Slider } from '@/components/ui/slider';
 
-// Dummy movie data (Replace with actual data in a real implementation)
+// Enhanced dummy movie data with ratings
 const dummyMovies = [
-  { id: 1, title: "Зеленая миля", director: "Фрэнк Дарабонт", year: 1999 },
-  { id: 2, title: "Побег из Шоушенка", director: "Фрэнк Дарабонт", year: 1994 },
-  { id: 3, title: "Форрест Гамп", director: "Роберт Земекис", year: 1994 },
-  { id: 4, title: "Леон", director: "Люк Бессон", year: 1994 },
-  { id: 5, title: "Бойцовский клуб", director: "Дэвид Финчер", year: 1999 },
-  { id: 6, title: "Матрица", director: "Сёстры Вачовски", year: 1999 },
-  { id: 7, title: "Начало", director: "Кристофер Нолан", year: 2010 },
-  { id: 8, title: "Интерстеллар", director: "Кристофер Нолан", year: 2014 },
-  { id: 9, title: "Гладиатор", director: "Ридли Скотт", year: 2000 },
+  { id: 1, title: "Зеленая миля", director: "Фрэнк Дарабонт", year: 1999, rating: 9.1, genre: "Драма, Криминал" },
+  { id: 2, title: "Побег из Шоушенка", director: "Фрэнк Дарабонт", year: 1994, rating: 9.3, genre: "Драма" },
+  { id: 3, title: "Форрест Гамп", director: "Роберт Земекис", year: 1994, rating: 8.8, genre: "Драма, Комедия" },
+  { id: 4, title: "Леон", director: "Люк Бессон", year: 1994, rating: 8.7, genre: "Боевик, Криминал, Драма" },
+  { id: 5, title: "Бойцовский клуб", director: "Дэвид Финчер", year: 1999, rating: 8.8, genre: "Драма, Триллер" },
+  { id: 6, title: "Матрица", director: "Сёстры Вачовски", year: 1999, rating: 8.7, genre: "Фантастика, Боевик" },
+  { id: 7, title: "Начало", director: "Кристофер Нолан", year: 2010, rating: 8.7, genre: "Фантастика, Боевик" },
+  { id: 8, title: "Интерстеллар", director: "Кристофер Нолан", year: 2014, rating: 8.6, genre: "Фантастика, Драма" },
+  { id: 9, title: "Гладиатор", director: "Ридли Скотт", year: 2000, rating: 8.6, genre: "Боевик, Драма" },
 ];
 
 const Movies = () => {
@@ -70,11 +71,18 @@ const Movies = () => {
       id: movie.id,
       type: 'movie',
       title: movie.title,
-      subtitle: `${movie.director}, ${movie.year}`
+      subtitle: `${movie.director}, ${movie.year}`,
+      rating: movie.rating
     };
     
     const isFavorite = toggleFavorite(favoriteItem);
     setFavorites(prev => ({...prev, [movie.id]: isFavorite}));
+    
+    if (isFavorite) {
+      toast.success(`"${movie.title}" добавлен в избранное`);
+    } else {
+      toast.info(`"${movie.title}" удален из избранного`);
+    }
   };
 
   const handleGoToRecommendations = () => {
@@ -87,6 +95,27 @@ const Movies = () => {
     sessionStorage.setItem('recommendationType', 'books');
     navigate('/recommendations');
     toast.info('Переход к подобранным книгам на основе выбранных фильмов');
+  };
+
+  // Helper function to render stars based on rating
+  const renderRatingStars = (rating: number) => {
+    const roundedRating = Math.round(rating);
+    const starsArray = [];
+    
+    for (let i = 0; i < 10; i++) {
+      if (i < roundedRating) {
+        starsArray.push(<Star key={i} size={16} fill="currentColor" className="text-amber-500" />);
+      } else {
+        starsArray.push(<Star key={i} size={16} className="text-gray-300" />);
+      }
+    }
+    
+    return (
+      <div className="flex items-center gap-1 mt-2">
+        <div className="flex">{starsArray}</div>
+        <span className="ml-1 text-sm font-medium">{rating.toFixed(1)}</span>
+      </div>
+    );
   };
 
   return (
@@ -162,9 +191,22 @@ const Movies = () => {
                   </button>
                 </div>
                 
-                <div className="text-litflix-darkGreen/70 text-sm">
+                {renderRatingStars(movie.rating)}
+                
+                <div className="text-litflix-darkGreen/70 text-sm mt-3">
                   <p>Режиссер: {movie.director}</p>
                   <p>Год: {movie.year}</p>
+                  <p>Жанр: {movie.genre}</p>
+                </div>
+                
+                <div className="mt-3">
+                  <Slider 
+                    defaultValue={[movie.rating]} 
+                    max={10} 
+                    step={0.1} 
+                    disabled={true} 
+                    className="cursor-default"
+                  />
                 </div>
               </CardContent>
             </Card>

@@ -4,29 +4,33 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
+import { Film, Star, Heart } from 'lucide-react';
+import { isInFavorites, toggleFavorite, FavoriteItem } from '@/lib/favoritesService';
+import { Slider } from '@/components/ui/slider';
 
 // Это просто для демонстрации, в реальном приложении данные будут из API
 const bookRecommendations = [
-  { id: 101, title: "Мастер и Маргарита", author: "Михаил Булгаков" },
-  { id: 102, title: "1984", author: "Джордж Оруэлл" },
-  { id: 103, title: "Гарри Поттер и философский камень", author: "Дж. К. Роулинг" },
-  { id: 104, title: "Война и мир", author: "Лев Толстой" },
-  { id: 105, title: "Преступление и наказание", author: "Фёдор Достоевский" },
-  { id: 106, title: "Три товарища", author: "Эрих Мария Ремарк" },
+  { id: 101, title: "Мастер и Маргарита", author: "Михаил Булгаков", rating: 9.2, genre: "Фантастика, Классика" },
+  { id: 102, title: "1984", author: "Джордж Оруэлл", rating: 9.0, genre: "Антиутопия" },
+  { id: 103, title: "Гарри Поттер и философский камень", author: "Дж. К. Роулинг", rating: 8.5, genre: "Фэнтези" },
+  { id: 104, title: "Война и мир", author: "Лев Толстой", rating: 8.9, genre: "Исторический роман" },
+  { id: 105, title: "Преступление и наказание", author: "Фёдор Достоевский", rating: 9.1, genre: "Психологический роман" },
+  { id: 106, title: "Три товарища", author: "Эрих Мария Ремарк", rating: 8.8, genre: "Драма" },
 ];
 
 const movieRecommendations = [
-  { id: 201, title: "Властелин колец", director: "Питер Джексон", year: 2001 },
-  { id: 202, title: "Зелёная книга", director: "Питер Фаррелли", year: 2018 },
-  { id: 203, title: "Шоу Трумана", director: "Питер Уир", year: 1998 },
-  { id: 204, title: "Жизнь Пи", director: "Энг Ли", year: 2012 },
-  { id: 205, title: "Престиж", director: "Кристофер Нолан", year: 2006 },
+  { id: 201, title: "Властелин колец", director: "Питер Джексон", year: 2001, rating: 8.9, genre: "Фэнтези, Приключения" },
+  { id: 202, title: "Зелёная книга", director: "Питер Фаррелли", year: 2018, rating: 8.4, genre: "Драма, Комедия" },
+  { id: 203, title: "Шоу Трумана", director: "Питер Уир", year: 1998, rating: 8.3, genre: "Драма, Фантастика" },
+  { id: 204, title: "Жизнь Пи", director: "Энг Ли", year: 2012, rating: 7.8, genre: "Приключения, Драма" },
+  { id: 205, title: "Престиж", director: "Кристофер Нолан", year: 2006, rating: 8.5, genre: "Триллер, Драма" },
 ];
 
 const Recommendations = () => {
   const navigate = useNavigate();
   const [recommendationType, setRecommendationType] = useState<'books' | 'movies'>('books');
   const [recommendations, setRecommendations] = useState<any[]>([]);
+  const [favorites, setFavorites] = useState<Record<number, boolean>>({});
 
   // Получение типа рекомендаций из sessionStorage
   useEffect(() => {
@@ -39,9 +43,15 @@ const Recommendations = () => {
   // Установка рекомендаций на основе типа
   useEffect(() => {
     // В реальном приложении здесь будет запрос к API
-    setRecommendations(
-      recommendationType === 'books' ? bookRecommendations : movieRecommendations
-    );
+    const items = recommendationType === 'books' ? bookRecommendations : movieRecommendations;
+    setRecommendations(items);
+    
+    // Initialize favorites
+    const initFavorites: Record<number, boolean> = {};
+    items.forEach(item => {
+      initFavorites[item.id] = isInFavorites(item.id, recommendationType === 'books' ? 'book' : 'movie');
+    });
+    setFavorites(initFavorites);
   }, [recommendationType]);
 
   const handleBackClick = () => {
@@ -53,9 +63,48 @@ const Recommendations = () => {
     }
   };
 
-  const handleToggleFavorite = (id: number) => {
-    // Реализация в реальном приложении
-    toast.success(`Добавлено в избранное: ${id}`);
+  const handleToggleFavorite = (e: React.MouseEvent, item: any) => {
+    e.stopPropagation();
+    
+    const favoriteItem: FavoriteItem = {
+      id: item.id,
+      type: recommendationType === 'books' ? 'book' : 'movie',
+      title: item.title,
+      subtitle: recommendationType === 'books' 
+        ? item.author 
+        : `${item.director}, ${item.year}`,
+      rating: item.rating
+    };
+    
+    const isFavorite = toggleFavorite(favoriteItem);
+    setFavorites(prev => ({...prev, [item.id]: isFavorite}));
+    
+    if (isFavorite) {
+      toast.success(`"${item.title}" добавлен в избранное`);
+    } else {
+      toast.info(`"${item.title}" удален из избранного`);
+    }
+  };
+  
+  // Helper function to render stars based on rating
+  const renderRatingStars = (rating: number) => {
+    const roundedRating = Math.round(rating);
+    const starsArray = [];
+    
+    for (let i = 0; i < 10; i++) {
+      if (i < roundedRating) {
+        starsArray.push(<Star key={i} size={16} fill="currentColor" className="text-amber-500" />);
+      } else {
+        starsArray.push(<Star key={i} size={16} className="text-gray-300" />);
+      }
+    }
+    
+    return (
+      <div className="flex items-center gap-1 mt-2">
+        <div className="flex">{starsArray}</div>
+        <span className="ml-1 text-sm font-medium">{rating.toFixed(1)}</span>
+      </div>
+    );
   };
 
   // Анимированные элементы дизайна
@@ -121,33 +170,73 @@ const Recommendations = () => {
                   <div className="flex justify-between items-start mb-3">
                     <h3 className="text-lg font-medium text-litflix-darkGreen">{item.title}</h3>
                     <button 
-                      onClick={() => handleToggleFavorite(item.id)}
-                      className="p-1.5 rounded-full bg-litflix-lightGreen/20 text-litflix-darkGreen/70"
+                      onClick={(e) => handleToggleFavorite(e, item)}
+                      className={`p-2 rounded-full ${
+                        favorites[item.id] 
+                          ? 'bg-litflix-paleYellow text-litflix-darkGreen' 
+                          : 'bg-litflix-lightGreen/20 text-litflix-darkGreen/70'
+                      }`}
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-                      </svg>
+                      <Heart size={18} fill={favorites[item.id] ? "currentColor" : "none"} />
                     </button>
                   </div>
-                  <p className="text-litflix-darkGreen/70 text-sm italic">{item.author}</p>
+                  
+                  {renderRatingStars(item.rating)}
+                  
+                  <div className="text-litflix-darkGreen/70 text-sm mt-3">
+                    <p className="italic">{item.author}</p>
+                    <p>{item.genre}</p>
+                  </div>
+                  
+                  <div className="mt-3">
+                    <Slider 
+                      defaultValue={[item.rating]} 
+                      max={10} 
+                      step={0.1} 
+                      disabled={true}
+                      className="cursor-default" 
+                    />
+                  </div>
                 </div>
               ) : (
                 // Movie card
                 <div>
                   <div className="flex justify-between items-start mb-3">
-                    <h3 className="text-lg font-medium text-litflix-darkGreen">{item.title}</h3>
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-full bg-litflix-lightGreen/30 text-litflix-darkGreen">
+                        <Film size={20} />
+                      </div>
+                      <h3 className="text-lg font-medium text-litflix-darkGreen">{item.title}</h3>
+                    </div>
                     <button 
-                      onClick={() => handleToggleFavorite(item.id)}
-                      className="p-1.5 rounded-full bg-litflix-lightGreen/20 text-litflix-darkGreen/70"
+                      onClick={(e) => handleToggleFavorite(e, item)}
+                      className={`p-2 rounded-full ${
+                        favorites[item.id] 
+                          ? 'bg-litflix-paleYellow text-litflix-darkGreen' 
+                          : 'bg-litflix-lightGreen/20 text-litflix-darkGreen/70'
+                      }`}
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-                      </svg>
+                      <Heart size={18} fill={favorites[item.id] ? "currentColor" : "none"} />
                     </button>
                   </div>
-                  <p className="text-litflix-darkGreen/70 text-sm">
-                    {item.director}, {item.year}
-                  </p>
+                  
+                  {renderRatingStars(item.rating)}
+                  
+                  <div className="text-litflix-darkGreen/70 text-sm mt-3">
+                    <p>Режиссер: {item.director}</p>
+                    <p>Год: {item.year}</p>
+                    <p>Жанр: {item.genre}</p>
+                  </div>
+                  
+                  <div className="mt-3">
+                    <Slider 
+                      defaultValue={[item.rating]} 
+                      max={10} 
+                      step={0.1} 
+                      disabled={true} 
+                      className="cursor-default"
+                    />
+                  </div>
                 </div>
               )}
             </div>
