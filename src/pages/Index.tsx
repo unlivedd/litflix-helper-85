@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FindBookButton from '@/components/FindBookButton';
@@ -28,8 +27,8 @@ const Index = () => {
   };
   
   const handleFindMovie = () => {
-    // Navigate to the movies page
-    navigate('/movies');
+    // Navigate to the movies page with state
+    navigate('/movies', { state: { fromHome: true } });
   };
 
   const handleBookClick = (id: number) => {

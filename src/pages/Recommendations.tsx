@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -6,7 +5,6 @@ import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
 import { Film, Star, Heart } from 'lucide-react';
 import { isInFavorites, toggleFavorite, FavoriteItem } from '@/lib/favoritesService';
-import { Slider } from '@/components/ui/slider';
 
 // Это просто для демонстрации, в реальном приложении данные будут из API
 const bookRecommendations = [

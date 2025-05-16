@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
 import { isInFavorites, toggleFavorite, FavoriteItem } from '@/lib/favoritesService';
@@ -8,7 +7,6 @@ import { Film, Heart, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Card, CardContent } from '@/components/ui/card';
-import { Slider } from '@/components/ui/slider';
 
 // Enhanced dummy movie data with ratings
 const dummyMovies = [
@@ -25,8 +23,16 @@ const dummyMovies = [
 
 const Movies = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [favorites, setFavorites] = useState<Record<number, boolean>>({});
   const [selectedMovies, setSelectedMovies] = useState<number[]>([]);
+  const [fromHome, setFromHome] = useState(false);
+
+  // Check if the user came from the home page
+  useEffect(() => {
+    const state = location.state as { fromHome?: boolean } | undefined;
+    setFromHome(!!state?.fromHome);
+  }, [location]);
 
   // Загружаем ранее выбранные фильмы из sessionStorage при загрузке страницы
   useEffect(() => {
@@ -97,6 +103,14 @@ const Movies = () => {
     toast.info('Переход к подобранным книгам на основе выбранных фильмов');
   };
 
+  const handleBackClick = () => {
+    if (fromHome) {
+      navigate('/'); // Navigate back to the home page if we came from there
+    } else {
+      navigate(-1); // Otherwise just go back
+    }
+  };
+
   // Helper function to render stars based on rating
   const renderRatingStars = (rating: number) => {
     const roundedRating = Math.round(rating);
@@ -133,7 +147,7 @@ const Movies = () => {
       
       <main className="container mx-auto px-4 py-8">
         <div className="mb-6">
-          <BackButton onClick={() => navigate('/')} />
+          <BackButton onClick={handleBackClick} />
         </div>
         
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">

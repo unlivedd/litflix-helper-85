@@ -1,4 +1,3 @@
-
 import { toast } from 'sonner';
 import { getCurrentUser, updateUser } from './authService';
 import { MongoDocument } from './mongoService';
@@ -7,7 +6,8 @@ export type FavoriteItem = {
   id: number;
   type: 'book' | 'movie';
   title: string;
-  subtitle?: string; // Adding an optional subtitle field
+  subtitle: string;
+  rating?: number; // Make rating optional to fix the type error
 };
 
 export const isInFavorites = (id: number, type: 'book' | 'movie'): boolean => {
