@@ -54,7 +54,7 @@ export const loginUser = async (email: string, password: string): Promise<boolea
   try {
     const usersCollection = getUsersCollection();
     
-    // Find user by email
+    // Find user by email and password
     const user = usersCollection.findOne({ email, password });
     
     if (user) {
@@ -119,7 +119,7 @@ export const initializeAuthService = () => {
   const usersCollection = getUsersCollection();
   if (usersCollection.find().length === 0) {
     usersCollection.insertOne({
-      name: 'Test User',
+      name: 'Тестовый пользователь',
       email: 'test@example.com',
       password: 'password',
       favorites: []

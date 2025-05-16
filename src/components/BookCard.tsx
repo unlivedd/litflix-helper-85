@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 import { Info, Heart } from 'lucide-react';
@@ -27,8 +27,36 @@ const BookCard: React.FC<BookCardProps> = ({
   rating
 }) => {
   const navigate = useNavigate();
+  const [isFavorite, setIsFavorite] = useState(id ? isInFavorites(id, 'book') : false);
   
-  const isFavorite = id ? isInFavorites(id, 'book') : false;
+  // Update favorite state when component mounts or when favorites change
+  useEffect(() => {
+    const updateFavoriteState = () => {
+      if (id) {
+        setIsFavorite(isInFavorites(id, 'book'));
+      }
+    };
+    
+    // Initial state
+    updateFavoriteState();
+    
+    // Listen for changes in favorites
+    const handleFavoritesChanged = (e: any) => {
+      if (e.detail?.item?.id === id && e.detail?.item?.type === 'book') {
+        setIsFavorite(e.detail.isNowFavorite);
+      } else {
+        updateFavoriteState();
+      }
+    };
+    
+    window.addEventListener('favorites-changed', handleFavoritesChanged as EventListener);
+    window.addEventListener('storage', updateFavoriteState);
+    
+    return () => {
+      window.removeEventListener('favorites-changed', handleFavoritesChanged as EventListener);
+      window.removeEventListener('storage', updateFavoriteState);
+    };
+  }, [id]);
   
   const handleInfoClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -50,6 +78,9 @@ const BookCard: React.FC<BookCardProps> = ({
     };
     
     const isNowFavorite = toggleFavorite(favoriteItem);
+    
+    // Update local state immediately for responsive UI
+    setIsFavorite(isNowFavorite);
     
     toast.success(isNowFavorite 
       ? `"${title}" добавлено в избранное` 

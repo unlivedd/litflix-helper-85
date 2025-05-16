@@ -148,7 +148,13 @@ export const initializeDatabase = () => {
   // Create users collection if it doesn't exist
   const usersCollection = createCollection('users');
   if (usersCollection.find().length === 0) {
-    // Maybe add some initial users
+    // Add test user for convenience
+    usersCollection.insertOne({
+      name: 'Тестовый пользователь',
+      email: 'test@example.com',
+      password: 'password',
+      favorites: []
+    });
   }
   
   // Mark as initialized

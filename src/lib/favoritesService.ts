@@ -11,14 +11,14 @@ export type FavoriteItem = {
 
 export const isInFavorites = (id: number, type: 'book' | 'movie'): boolean => {
   try {
-    // Проверяем, авторизован ли пользователь
+    // Check if user is logged in
     const currentUser = getCurrentUser();
     if (!currentUser) return false;
     
-    // Получаем избранное пользователя
+    // Get user favorites
     const favorites = currentUser.favorites || [];
     
-    // Проверяем наличие элемента в избранном
+    // Check if item exists in favorites
     return favorites.some((item: FavoriteItem) => item.id === id && item.type === type);
   } catch (error) {
     console.error('Error checking favorites:', error);
@@ -28,38 +28,43 @@ export const isInFavorites = (id: number, type: 'book' | 'movie'): boolean => {
 
 export const toggleFavorite = (item: FavoriteItem): boolean => {
   try {
-    // Проверяем, авторизован ли пользователь
+    // Check if user is logged in
     const currentUser = getCurrentUser();
     if (!currentUser) {
       toast.error('Необходимо войти для добавления в избранное');
       return false;
     }
     
-    // Инициализируем массив избранного, если его нет
+    // Initialize favorites array if it doesn't exist
     if (!currentUser.favorites) {
       currentUser.favorites = [];
     }
     
-    // Проверяем, есть ли уже такой элемент в избранном
+    // Check if item already exists in favorites
     const existingIndex = currentUser.favorites.findIndex(
       (fav: FavoriteItem) => fav.id === item.id && fav.type === item.type
     );
     
-    // Если элемент уже в избранном - удаляем его
+    let isNowFavorite = false;
+    
+    // If item exists in favorites - remove it
     if (existingIndex !== -1) {
       currentUser.favorites.splice(existingIndex, 1);
-      
-      // Update user in database and localStorage
-      updateUser({ favorites: currentUser.favorites });
-      return false;
+    } else {
+      // If item doesn't exist - add it
+      currentUser.favorites.push(item);
+      isNowFavorite = true;
     }
-    
-    // Если элемента нет - добавляем его
-    currentUser.favorites.push(item);
     
     // Update user in database and localStorage
     updateUser({ favorites: currentUser.favorites });
-    return true;
+    
+    // Dispatch a custom event to notify other components about favorites change
+    window.dispatchEvent(new CustomEvent('favorites-changed', { 
+      detail: { item, isNowFavorite } 
+    }));
+    
+    return isNowFavorite;
   } catch (error) {
     console.error('Error toggling favorite:', error);
     return false;
@@ -68,7 +73,7 @@ export const toggleFavorite = (item: FavoriteItem): boolean => {
 
 export const getFavorites = (): FavoriteItem[] => {
   try {
-    // Проверяем, авторизован ли пользователь
+    // Check if user is logged in
     const currentUser = getCurrentUser();
     if (!currentUser) return [];
     

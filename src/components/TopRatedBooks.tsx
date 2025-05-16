@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import BookRating from './BookRating';
 import { getAllBooks } from '@/lib/bookService';
@@ -9,10 +9,39 @@ import { toast } from 'sonner';
 
 const TopRatedBooks = () => {
   const navigate = useNavigate();
+  const [favoriteStates, setFavoriteStates] = useState<Record<number, boolean>>({});
+  
   // Получаем книги и сортируем по рейтингу
   const books = getAllBooks()
     .sort((a, b) => (b.rating || 0) - (a.rating || 0))
     .slice(0, 5); // Берем только топ-5
+    
+  // Update favorite states when component mounts or when favorites change
+  useEffect(() => {
+    const updateFavoriteStates = () => {
+      const newStates: Record<number, boolean> = {};
+      books.forEach(book => {
+        newStates[book.id] = isInFavorites(book.id, 'book');
+      });
+      setFavoriteStates(newStates);
+    };
+    
+    // Initial state
+    updateFavoriteStates();
+    
+    // Listen for changes in favorites
+    const handleFavoritesChanged = () => {
+      updateFavoriteStates();
+    };
+    
+    window.addEventListener('favorites-changed', handleFavoritesChanged);
+    window.addEventListener('storage', handleFavoritesChanged);
+    
+    return () => {
+      window.removeEventListener('favorites-changed', handleFavoritesChanged);
+      window.removeEventListener('storage', handleFavoritesChanged);
+    };
+  }, [books]);
 
   const handleFavoriteToggle = (e: React.MouseEvent, book: any) => {
     e.stopPropagation();
@@ -26,6 +55,12 @@ const TopRatedBooks = () => {
     
     const isNowFavorite = toggleFavorite(favoriteItem);
     
+    // Update local state immediately for a responsive UI
+    setFavoriteStates(prev => ({
+      ...prev,
+      [book.id]: isNowFavorite
+    }));
+    
     toast.success(isNowFavorite 
       ? `"${book.title}" добавлено в избранное` 
       : `"${book.title}" удалено из избранного`
@@ -36,7 +71,7 @@ const TopRatedBooks = () => {
     <div className="mt-12 pb-16">
       <div className="max-w-4xl mx-auto">
         {books.map((book, index) => {
-          const isFavorite = isInFavorites(book.id, 'book');
+          const isFavorite = favoriteStates[book.id] || false;
           
           return (
             <div 

@@ -17,11 +17,16 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   
-  // When component mounts, focus the input
+  // When component mounts, focus the input with a slight delay
+  // to ensure the input is properly rendered and ready to receive focus
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
+    const timer = setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -51,6 +56,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
                    text-litflix-darkGreen placeholder:text-litflix-darkGreen/50
                    focus:outline-none focus:ring-2 focus:ring-litflix-mediumGreen/50
                    shadow-sm"
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent click from bubbling up
+          }}
         />
         <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-litflix-darkGreen/60">
           <Search size={20} />
