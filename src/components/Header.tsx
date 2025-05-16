@@ -31,22 +31,14 @@ const Header: React.FC<HeaderProps> = ({ onSearchClick }) => {
     >
       <div className="container mx-auto px-4 flex items-center justify-between">
         <div 
-          className="font-serif text-xl font-bold text-litflix-darkGreen cursor-pointer"
+          className="cursor-pointer"
           onClick={() => navigate('/')}
         >
-          <span className="relative">
-            B
-          </span>
-          <span className="relative">
-            <span className="absolute text-xs top-0 right-0 font-sans">R.</span>
-            O
-          </span>
-          <span className="relative">
-            <span className="absolute text-xs bottom-0 right-0 font-sans">d.</span>
-            O
-          </span>
-          <span>K</span>
-          <span>S</span>
+          <img 
+            src="/lovable-uploads/23da1b85-5ec1-491a-958d-130fcb06d479.png" 
+            alt="BOOKS Logo" 
+            className="h-8"
+          />
         </div>
         
         <div className="flex items-center space-x-4">

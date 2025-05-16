@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -15,6 +15,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
   placeholder = 'Поиск книг...'
 }) => {
   const [query, setQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  
+  // When component mounts, focus the input
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +41,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
     >
       <div className="relative">
         <input
+          ref={inputRef}
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}

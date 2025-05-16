@@ -77,21 +77,11 @@ const Index = () => {
       <main className="container mx-auto px-4 pt-6 pb-20">
         {/* BOOKS logo */}
         <div className="pt-8 pb-4 text-center">
-          <h1 className="text-7xl font-serif font-bold tracking-wider inline-block text-litflix-darkGreen">
-            <span className="relative">
-              B
-            </span>
-            <span className="relative">
-              <span className="absolute text-xs top-3 right-0 font-sans">R.</span>
-              O
-            </span>
-            <span className="relative">
-              <span className="absolute text-xs bottom-3 right-0 font-sans">d.</span>
-              O
-            </span>
-            <span>K</span>
-            <span>S</span>
-          </h1>
+          <img 
+            src="/lovable-uploads/23da1b85-5ec1-491a-958d-130fcb06d479.png" 
+            alt="BOOKS Logo" 
+            className="h-20 inline-block"
+          />
         </div>
         
         {/* Action buttons */}
