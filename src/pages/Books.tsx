@@ -1,5 +1,5 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import BackButton from '@/components/BackButton';
@@ -14,6 +14,21 @@ const Books = () => {
   const [selectedBooks, setSelectedBooks] = useState<number[]>([]);
   const [showSearch, setShowSearch] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  
+  // Загружаем ранее выбранные книги из sessionStorage при загрузке страницы
+  useEffect(() => {
+    const savedSelectedBooks = sessionStorage.getItem('selectedBooks');
+    if (savedSelectedBooks) {
+      try {
+        const parsedBooks = JSON.parse(savedSelectedBooks);
+        if (Array.isArray(parsedBooks)) {
+          setSelectedBooks(parsedBooks);
+        }
+      } catch (error) {
+        console.error('Ошибка при загрузке выбранных книг:', error);
+      }
+    }
+  }, []);
   
   // Округляем рейтинги для корректного отображения
   const books = booksData.map(book => ({
@@ -39,11 +54,15 @@ const Books = () => {
   };
 
   const toggleBookSelection = (id: number) => {
-    setSelectedBooks(prev => 
-      prev.includes(id) 
+    setSelectedBooks(prev => {
+      const newSelection = prev.includes(id) 
         ? prev.filter(bookId => bookId !== id) 
-        : [...prev, id]
-    );
+        : [...prev, id];
+      
+      // Сохраняем выбор в sessionStorage
+      sessionStorage.setItem('selectedBooks', JSON.stringify(newSelection));
+      return newSelection;
+    });
   };
 
   const handleFindRecommendations = () => {
@@ -53,7 +72,7 @@ const Books = () => {
     }
     
     toast.success(`Выбрано книг: ${selectedBooks.length}`);
-    // Сохраняем тип рекомендаций и переходим прямо к рекомендациям
+    // Сохраняем тип рекомендаций и выбранные книги
     sessionStorage.setItem('recommendationType', 'movies');
     navigate('/recommendations');
     toast.info('Переход к подобранным фильмам на основе выбранных книг');

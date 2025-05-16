@@ -25,6 +25,22 @@ const dummyMovies = [
 const Movies = () => {
   const navigate = useNavigate();
   const [favorites, setFavorites] = useState<Record<number, boolean>>({});
+  const [selectedMovies, setSelectedMovies] = useState<number[]>([]);
+
+  // Загружаем ранее выбранные фильмы из sessionStorage при загрузке страницы
+  useEffect(() => {
+    const savedSelectedMovies = sessionStorage.getItem('selectedMovies');
+    if (savedSelectedMovies) {
+      try {
+        const parsedMovies = JSON.parse(savedSelectedMovies);
+        if (Array.isArray(parsedMovies)) {
+          setSelectedMovies(parsedMovies);
+        }
+      } catch (error) {
+        console.error('Ошибка при загрузке выбранных фильмов:', error);
+      }
+    }
+  }, []);
 
   // Initialize favorites
   useEffect(() => {
@@ -36,8 +52,19 @@ const Movies = () => {
   }, []);
 
   const handleMovieSelect = (id: number) => {
-    const movie = dummyMovies.find(m => m.id === id);
-    if (!movie) return;
+    setSelectedMovies(prev => {
+      const newSelection = prev.includes(id) 
+        ? prev.filter(movieId => movieId !== id) 
+        : [...prev, id];
+      
+      // Сохраняем выбор в sessionStorage
+      sessionStorage.setItem('selectedMovies', JSON.stringify(newSelection));
+      return newSelection;
+    });
+  };
+
+  const handleToggleFavorite = (e: React.MouseEvent, movie: any) => {
+    e.stopPropagation();
     
     const favoriteItem: FavoriteItem = {
       id: movie.id,
@@ -47,16 +74,16 @@ const Movies = () => {
     };
     
     const isFavorite = toggleFavorite(favoriteItem);
-    setFavorites(prev => ({...prev, [id]: isFavorite}));
-    
-    toast.success(isFavorite 
-      ? `"${movie.title}" добавлен в избранное` 
-      : `"${movie.title}" удален из избранного`
-    );
+    setFavorites(prev => ({...prev, [movie.id]: isFavorite}));
   };
 
   const handleGoToRecommendations = () => {
-    // Вместо перехода на опрос, сразу перейти к рекомендациям
+    if (selectedMovies.length === 0) {
+      toast.error('Пожалуйста, выберите хотя бы один фильм');
+      return;
+    }
+    
+    // Сохраняем тип рекомендаций и переходим к рекомендациям
     sessionStorage.setItem('recommendationType', 'books');
     navigate('/recommendations');
     toast.info('Переход к подобранным книгам на основе выбранных фильмов');
@@ -88,16 +115,30 @@ const Movies = () => {
           <Button
             onClick={handleGoToRecommendations}
             className="bg-litflix-mediumGreen hover:bg-litflix-darkGreen text-white px-6 py-3 rounded-full"
+            disabled={selectedMovies.length === 0}
           >
             Подобрать книги
           </Button>
         </div>
+
+        {selectedMovies.length > 0 && (
+          <div className="mb-6 p-4 bg-litflix-paleYellow/50 rounded-lg">
+            <p className="text-litflix-darkGreen text-center">
+              Выбрано фильмов: <span className="font-bold">{selectedMovies.length}</span>
+            </p>
+          </div>
+        )}
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {dummyMovies.map((movie) => (
             <Card 
               key={movie.id}
-              className="hover-lift bg-white/80 backdrop-blur-sm overflow-hidden border border-litflix-lightGreen/20"
+              className={`hover-lift backdrop-blur-sm overflow-hidden border transition-all duration-300 ${
+                selectedMovies.includes(movie.id) 
+                  ? 'border-litflix-mediumGreen bg-litflix-paleYellow/60' 
+                  : 'border-litflix-lightGreen/20 bg-white/80'
+              }`}
+              onClick={() => handleMovieSelect(movie.id)}
             >
               <CardContent className="p-5">
                 <div className="flex justify-between items-start mb-2">
@@ -109,7 +150,7 @@ const Movies = () => {
                   </div>
                   
                   <button 
-                    onClick={() => handleMovieSelect(movie.id)}
+                    onClick={(e) => handleToggleFavorite(e, movie)}
                     className={`p-2 rounded-full ${
                       favorites[movie.id] 
                         ? 'bg-litflix-paleYellow text-litflix-darkGreen' 

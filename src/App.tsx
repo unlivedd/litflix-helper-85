@@ -13,6 +13,7 @@ import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Questionnaire from "./pages/Questionnaire";
 import { useEffect } from "react";
 import { initializeDatabase } from "./lib/mongoService";
 
@@ -39,6 +40,7 @@ const App = () => {
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/questionnaire" element={<Questionnaire />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
